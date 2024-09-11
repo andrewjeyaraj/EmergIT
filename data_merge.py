@@ -25,10 +25,10 @@ geocoded_hospitals = pd.read_csv(geocoded_hospitals_path)
 # If the column name is different, adjust it accordingly in the merge operation
 
 # Merge the two dataframes on the 'name' column
-merged_data = pd.merge(geocoded_hospitals, hospital_data[['name', 'timing']], on='name', how='left')
+merged_data = pd.merge(geocoded_hospitals, hospital_data[['name', 'waiting_time']], on='name', how='left')
 
 # Save the updated data to a new CSV file (or overwrite the existing one)
-output_path = os.path.join(current_dir, 'geocoded_hospitals_with_timing.csv')
+output_path = os.path.join(current_dir, 'geocoded_hospitals_with_latlon.csv')
 merged_data.to_csv(output_path, index=False)
 
 print(f"Data merged successfully. Output saved to {output_path}")
