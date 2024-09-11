@@ -45,7 +45,11 @@ if st.button('Load Map'):
         with open(map_html_path, 'r', encoding='utf-8') as file:
             map_html = file.read()
 
-        # Embed the HTML file content into the Streamlit app with a much larger height
-        st.components.v1.html(map_html, height=1200)  # Map height adjusted to 1200 for a larger view
+        # Embed the HTML file content into the Streamlit app with custom width and height
+        st.components.v1.html(f"""
+            <div style="width: 100%; height: 1200px;">
+                {map_html}
+            </div>
+            """, height=1200)
     else:
         st.error("Map HTML file not found. Please ensure that the script ran correctly.")
