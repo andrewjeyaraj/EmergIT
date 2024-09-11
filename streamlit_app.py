@@ -14,20 +14,26 @@ map_html_path = os.path.join(current_dir, 'hospital_map_with_nearest_hospital_pa
 
 # Function to execute a script and handle errors
 def run_script(script_path):
-    try:
-        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
-        st.write(f"Running {script_path}...")
-        st.write(result.stdout)  # Print the output of the script
-        if result.stderr:
-            st.error(f"Error in {script_path}: {result.stderr}")
-    except Exception as e:
-        st.error(f"Failed to run {script_path}: {str(e)}")
+    if os.path.exists(script_path):
+        try:
+            result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
+            st.write(f"Running {script_path}...")
+            st.write(result.stdout)  # Print the output of the script
+            if result.stderr:
+                st.error(f"Error in {script_path}: {result.stderr}")
+        except Exception as e:
+            st.error(f"Failed to run {script_path}: {str(e)}")
+    else:
+        st.error(f"Script not found: {script_path}")
 
 # Function to install a package if it's not already installed
 def install_package(package_name):
     try:
-        subprocess.run([sys.executable, "-m", "pip", "install", package_name], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, "-m", "pip", "install", package_name], capture_output=True, text=True)
         st.write(f"Installing {package_name}...")
+        st.write(result.stdout)
+        if result.stderr:
+            st.error(f"Error while installing {package_name}: {result.stderr}")
     except Exception as e:
         st.error(f"Failed to install {package_name}: {str(e)}")
 
