@@ -26,9 +26,9 @@ def run_script_silently(script_path):
         st.error(f"Script not found: {script_path}")
 
 # Streamlit app starts here
-st.title('Hospital Map Loader')
+st.title('Quebec Emergency Room Waiting Time Visualizer')
 
-st.markdown("Welcome! Click the button below to generate and view the hospital map based on the latest data.")
+st.markdown("Welcome! Click the button below to generate and view a map with hospitals color coded according to waiting times based on the latest data")
 
 # Button to trigger the loading and rendering of the map
 if st.button('Load Map'):
