@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_0da65aba0121c226c56a308db8f926e2 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+<input type="hidden" id="userLat" value="0">
+<input type="hidden" id="userLon" value="0">
+    
+<div style="position: fixed; bottom: 10px; left: 10px; background-color: white; padding: 10px; border: 1px solid black; z-index:9999;">
+    <h4>Mode of Transport</h4>
+    <input type="radio" id="car" name="transport" value="Car" checked>
+    <label for="car">Car</label><br>
+    <input type="radio" id="bicycle" name="transport" value="Bicycle">
+    <label for="bicycle">Bicycle</label><br>
+    <input type="radio" id="bus" name="transport" value="Bus">
+    <label for="bus">Bus</label><br><br>
+
+    <button onclick="findNearestHospital()">Find lowest wait time</button>
+</div>
+
+<div id="output" style="position: fixed; bottom: 0; width: 100%; background-color: #f1f1f1; padding: 10px; text-align: center;">
+    Output will appear here.
+</div>
+    
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var userLat = position.coords.latitude;
+            var userLon = position.coords.longitude;
+            document.getElementById("userLat").value = userLat;
+            document.getElementById("userLon").value = userLon;
+            var userMarker = L.marker([userLat, userLon]).addTo(map).bindPopup('You are here!').openPopup();
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+getLocation();
+</script>
+    
+<script>
+function findNearestHospital() {
+    var transportMode = document.querySelector('input[name="transport"]:checked').value;
+    var userLat = parseFloat(document.getElementById("userLat").value);
+    var userLon = parseFloat(document.getElementById("userLon").value);
+    
+    var radius = 0;
+    if (transportMode === "Car") {
+        radius = 15; // 15 km for car
+    } else if (transportMode === "Bicycle") {
+        radius = 2; // 2 km for bicycle
+    } else if (transportMode === "Bus") {
+        radius = 5; // 5 km for bus
+    }
+
+    // Find the nearest hospital within the radius
+    var nearestHospital = null;
+    var minWaitTime = Number.MAX_VALUE;
+    var hospitalData = [{'name': 'Centre de santé et de services sociaux du Granit', 'address': '3569 rue Laval, Lac-Mégantic, G6B 1A5\nEstrie', 'latitude': 45.58859395, 'longitude': -70.90560461, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=61', 'waiting_time': '0:49', 'num_waiting': '1', 'total_people': '3', 'occupancy_rate': '0%', 'avg_wait_room': '5:01', 'avg_stretcher_time': '10:39'}, {'name': "Centre hospitalier de l'Université Laval", 'address': '2705 boulevard Laurier, Québec, G1V 4G2\nCapitale-Nationale', 'latitude': 46.76843805, 'longitude': -71.28250969, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=462', 'waiting_time': '7:17', 'num_waiting': '31', 'total_people': '83', 'occupancy_rate': '105%', 'avg_wait_room': '6:01', 'avg_stretcher_time': '11:33'}, {'name': 'Centre hospitalier de St.Mary', 'address': '3830 avenue Lacombe, Montréal, H3T 1M5\nMontréal', 'latitude': 45.4950203, 'longitude': -73.62383468, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289539', 'waiting_time': '6:05', 'num_waiting': '25', 'total_people': '63', 'occupancy_rate': '132%', 'avg_wait_room': '5:46', 'avg_stretcher_time': '17:51'}, {'name': 'Centre multiservices de santé et de services sociaux de Fermont', 'address': '1 rue Aquilon, Fermont, G0G 1J0\nCôte-Nord', 'latitude': 52.796743, 'longitude': -67.0902628, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=367', 'waiting_time': '4:36', 'num_waiting': '10', 'total_people': '11', 'occupancy_rate': '50%', 'avg_wait_room': '3:16', 'avg_stretcher_time': '5:50'}, {'name': 'Centre multiservices de santé et de services sociaux de Forestville', 'address': '2 7e rue, Forestville, G0T 1E0\nCôte-Nord', 'latitude': 48.7371185, 'longitude': -69.0753125, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=542', 'waiting_time': '5:18', 'num_waiting': '15', 'total_people': '18', 'occupancy_rate': '60%', 'avg_wait_room': '2:20', 'avg_stretcher_time': '10:52'}, {'name': 'Centre multiservices de santé et de services sociaux de la Basse-Côte-Nord', 'address': '1070 boulevard Docteur-Camille-Marcoux, Blanc-Sablon, G0G 1W0\nCôte-Nord', 'latitude': 51.4118896, 'longitude': -57.203258, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=351', 'waiting_time': '1:32', 'num_waiting': '2', 'total_people': '3', 'occupancy_rate': '50%', 'avg_wait_room': '2:11', 'avg_stretcher_time': '4:21'}, {'name': 'Centre multiservices de santé et de services sociaux de la Minganie', 'address': '1035 promenade des Anciens, Havre-Saint-Pierre, G0G 1P0\nCôte-Nord', 'latitude': 50.2377028, 'longitude': -63.6033943, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=566', 'waiting_time': '3:19', 'num_waiting': '3', 'total_people': '7', 'occupancy_rate': '100%', 'avg_wait_room': '2:34', 'avg_stretcher_time': '7:07'}, {'name': 'Centre multiservices de santé et de services sociaux de Saint-Marc-des-Carrières', 'address': '1045 boulevard Bona-Dussault, Saint-Marc-des-Carrières, G0A 4B0\nCapitale-Nationale', 'latitude': 46.6808892, 'longitude': -72.0492749, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=823', 'waiting_time': '3:10', 'num_waiting': '3', 'total_people': '9', 'occupancy_rate': '100%', 'avg_wait_room': '2:08', 'avg_stretcher_time': '8:00'}, {'name': 'Centre multiservices de santé et de services sociaux de Sainte-Anne-de-Beaupré', 'address': '11000 rue des Montagnards, Beaupré, G0A 1E0\nCapitale-Nationale', 'latitude': 47.0415461, 'longitude': -70.9004098, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=938', 'waiting_time': '3:10', 'num_waiting': '4', 'total_people': '10', 'occupancy_rate': '50%', 'avg_wait_room': '4:34', 'avg_stretcher_time': '13:34'}, {'name': 'Centre multiservices de santé et de services sociaux de Témiscaming-Kipawa', 'address': '180 rue Anvik, Témiscaming, J0Z 3R0\nAbitibi-Témiscamingue', 'latitude': 46.72537315, 'longitude': -79.09439986, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=342', 'waiting_time': '1:01', 'num_waiting': '1', 'total_people': '4', 'occupancy_rate': '0%', 'avg_wait_room': '3:40', 'avg_stretcher_time': '0:00'}, {'name': 'Centre multiservices de santé et de services sociaux des Escoumins', 'address': "4 rue de l'Hôpital, Les Escoumins, G0T 1K0\nCôte-Nord", 'latitude': 48.3515871, 'longitude': -69.4070876, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=541', 'waiting_time': '1:11', 'num_waiting': '1', 'total_people': '4', 'occupancy_rate': '33%', 'avg_wait_room': '2:04', 'avg_stretcher_time': '0:00'}, {'name': 'CHSLD et Hôpital Paul-Gilbert', 'address': '9330 boulevard du Centre-Hospitalier, Lévis, G6X 1L6\nChaudière-Appalaches', 'latitude': 46.72513675, 'longitude': -71.25915451, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=613', 'waiting_time': '1:32', 'num_waiting': '4', 'total_people': '13', 'occupancy_rate': 'not applicable', 'avg_wait_room': '0:00', 'avg_stretcher_time': '0:00'}, {'name': 'CHU Sainte-Justine', 'address': '3175 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1C5\nMontréal', 'latitude': 45.503440350000005, 'longitude': -73.62446772, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=801', 'waiting_time': '3:25', 'num_waiting': '9', 'total_people': '69', 'occupancy_rate': '163%', 'avg_wait_room': '3:55', 'avg_stretcher_time': '6:49'}, {'name': 'CHUS - Hôpital Fleurimont', 'address': '3001 12e Avenue Nord, Sherbrooke, J1H 5N4\nEstrie', 'latitude': 45.4473173, 'longitude': -71.8709085, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=424', 'waiting_time': '10:09', 'num_waiting': '33', 'total_people': '74', 'occupancy_rate': '121%', 'avg_wait_room': '5:34', 'avg_stretcher_time': '13:46'}, {'name': 'CHUS - Hôtel-Dieu de Sherbrooke', 'address': '580 rue Bowen Sud, Sherbrooke, J1G 2E8\nEstrie', 'latitude': 45.39944815, 'longitude': -71.8786916, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=425', 'waiting_time': '10:07', 'num_waiting': '29', 'total_people': '87', 'occupancy_rate': '141%', 'avg_wait_room': '9:46', 'avg_stretcher_time': '20:02'}, {'name': 'CLSC de Pohénégamook', 'address': '1922 rue Saint-Vallier, Pohénégamook, G0L 1J0\nBas-Saint-Laurent', 'latitude': 47.48606242808889, 'longitude': -69.28288449, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=595', 'waiting_time': '1:17', 'num_waiting': '3', 'total_people': '3', 'occupancy_rate': '0%', 'avg_wait_room': '1:13', 'avg_stretcher_time': '9:52'}, {'name': 'CLSC et centre de services ambulatoires de Murdochville', 'address': '600 avenue William-May, Murdochville, G0E 1W0\nGaspésie-Îles-de-la-Madeleine', 'latitude': 48.961394, 'longitude': -65.493858, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=713', 'waiting_time': '1:45', 'num_waiting': '2', 'total_people': '7', 'occupancy_rate': '50%', 'avg_wait_room': '2:33', 'avg_stretcher_time': '0:00'}, {'name': 'CLSC et centre de services ambulatoires de Paspébiac', 'address': '273 boulevard Gérard-D.-Levesque, Paspébiac, G0C 2K0\nGaspésie-Îles-de-la-Madeleine', 'latitude': 48.02114186948842, 'longitude': -65.287599, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=358270', 'waiting_time': '3:41', 'num_waiting': '7', 'total_people': '14', 'occupancy_rate': '50%', 'avg_wait_room': '3:09', 'avg_stretcher_time': '10:02'}, {'name': 'Hôpital Barrie Memorial / Barrie Memorial Hospital', 'address': '28 rue Gale, Ormstown, J0S 1K0\nMontérégie', 'latitude': 45.1256397, 'longitude': -74.0000538, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1124', 'waiting_time': '6:39', 'num_waiting': '20', 'total_people': '25', 'occupancy_rate': '160%', 'avg_wait_room': '3:50', 'avg_stretcher_time': '27:36:00'}, {'name': "Hôpital d'Amqui", 'address': '135 avenue Gaëtan-Archambault, Amqui, G5J 2K5\nBas-Saint-Laurent', 'latitude': 48.46856425, 'longitude': -67.41924531, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1035', 'waiting_time': '4:14', 'num_waiting': '8', 'total_people': '12', 'occupancy_rate': '33%', 'avg_wait_room': '2:01', 'avg_stretcher_time': '3:58'}, {'name': 'Hôpital de Chicoutimi', 'address': '305 rue Saint-Vallier, Saguenay, G7H 5H6\nSaguenay-Lac-Saint-Jean', 'latitude': 48.4267813, 'longitude': -71.04827831, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=518', 'waiting_time': '6:10', 'num_waiting': '19', 'total_people': '76', 'occupancy_rate': '71%', 'avg_wait_room': '4:55', 'avg_stretcher_time': '13:49'}, {'name': 'Hôpital de Gaspé', 'address': '215 boulevard de York Ouest, Gaspé, G4X 2W2\nGaspésie-Îles-de-la-Madeleine', 'latitude': 48.8128456, 'longitude': -64.49666755, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=98610', 'waiting_time': '4:16', 'num_waiting': '9', 'total_people': '15', 'occupancy_rate': '67%', 'avg_wait_room': '3:43', 'avg_stretcher_time': '18:58'}, {'name': 'Hôpital de Hull', 'address': '116 boulevard Lionel-Émond, Gatineau, J8Y 1W7\nOutaouais', 'latitude': 45.4458496, 'longitude': -75.7460147, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=737', 'waiting_time': '11:58', 'num_waiting': '24', 'total_people': '68', 'occupancy_rate': '124%', 'avg_wait_room': '7:01', 'avg_stretcher_time': '19:21'}, {'name': "Hôpital de l'Archipel", 'address': '430 chemin Principal, Les Îles-de-la-Madeleine, G4T 1R9\nGaspésie-Îles-de-la-Madeleine', 'latitude': 47.3758802, 'longitude': -61.8677393, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1103', 'waiting_time': '1:34', 'num_waiting': '1', 'total_people': '13', 'occupancy_rate': '133%', 'avg_wait_room': '3:34', 'avg_stretcher_time': '7:29'}, {'name': 'Hôpital de La Baie', 'address': '1000 rue du Docteur-Desgagné, Saguenay, G7B 2Y6\nSaguenay-Lac-Saint-Jean', 'latitude': 48.34374875, 'longitude': -70.88319507, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=714', 'waiting_time': '3:20', 'num_waiting': '5', 'total_people': '20', 'occupancy_rate': '43%', 'avg_wait_room': '4:42', 'avg_stretcher_time': '7:43'}, {'name': 'Hôpital de LaSalle', 'address': '8585 terrasse Champlain, Montréal, H8P 1C1\nMontréal', 'latitude': 45.42072445, 'longitude': -73.62329656, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=898', 'waiting_time': '7:33', 'num_waiting': '21', 'total_people': '44', 'occupancy_rate': '147%', 'avg_wait_room': '6:55', 'avg_stretcher_time': '19:37'}, {'name': 'Hôpital Notre-Dame-du-Lac', 'address': "58 rue de l'Église, Témiscouata-sur-le-Lac, G0L 1X0\nBas-Saint-Laurent", 'latitude': 47.611888, 'longitude': -68.798841, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=751', 'waiting_time': '1:48', 'num_waiting': '3', 'total_people': '10', 'occupancy_rate': '100%', 'avg_wait_room': '2:39', 'avg_stretcher_time': '4:45'}, {'name': 'Hôpital de Saint-Eustache', 'address': '520 boulevard Arthur-Sauvé, Saint-Eustache, J7R 5B1\nLaurentides', 'latitude': 45.5707884, 'longitude': -73.911428, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1204', 'waiting_time': '13:18', 'num_waiting': '25', 'total_people': '92', 'occupancy_rate': '166%', 'avg_wait_room': '8:22', 'avg_stretcher_time': '26:43:00'}, {'name': 'Hôpital de Verdun', 'address': '4000 boulevard LaSalle, Montréal, H4G 2A3\nMontréal', 'latitude': 45.4639933, 'longitude': -73.563513, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=502', 'waiting_time': '3:10', 'num_waiting': '10', 'total_people': '79', 'occupancy_rate': '215%', 'avg_wait_room': '4:37', 'avg_stretcher_time': '28:16:00'}, {'name': 'Hôpital du Sacré-Cœur de Montréal', 'address': '5400 boulevard Gouin Ouest, Montréal, H4J 1C5\nMontréal', 'latitude': 45.5324388, 'longitude': -73.7136577, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=174', 'waiting_time': '7:44', 'num_waiting': '31', 'total_people': '105', 'occupancy_rate': '133%', 'avg_wait_room': '6:30', 'avg_stretcher_time': '25:45:00'}, {'name': 'Hôpital et CHSLD de Papineau', 'address': '155 rue Maclaren Est, Gatineau, J8L 0C2\nOutaouais', 'latitude': 45.5882483, 'longitude': -75.4127149, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1201', 'waiting_time': '6:20', 'num_waiting': '14', 'total_people': '30', 'occupancy_rate': '92%', 'avg_wait_room': '4:25', 'avg_stretcher_time': '25:28:00'}, {'name': 'Hôpital et CHSLD Mémorial de Wakefield / Wakefield Memorial Hospital', 'address': '101 chemin Burnside, La Pêche, J0X 3G0\nOutaouais', 'latitude': 45.64902085, 'longitude': -75.93248465, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1198', 'waiting_time': '1:54', 'num_waiting': '2', 'total_people': '9', 'occupancy_rate': '75%', 'avg_wait_room': '3:56', 'avg_stretcher_time': '14:04'}, {'name': 'Hôpital et CLSC de Sept-Îles', 'address': '45 rue du Père-Divet, Sept-Îles, G4R 3N7\nCôte-Nord', 'latitude': 50.209753, 'longitude': -66.3826559, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=297169', 'waiting_time': '3:18', 'num_waiting': '5', 'total_people': '15', 'occupancy_rate': '90%', 'avg_wait_room': '7:40', 'avg_stretcher_time': '16:55'}, {'name': 'Hôpital et groupe de médecine de famille universitaire de Maria', 'address': '419 boulevard Perron, Maria, G0C 1Y0\nGaspésie-Îles-de-la-Madeleine', 'latitude': 48.1681255, 'longitude': -65.99195425, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1115', 'waiting_time': '5:02', 'num_waiting': '12', 'total_people': '31', 'occupancy_rate': '150%', 'avg_wait_room': '4:59', 'avg_stretcher_time': '12:53'}, {'name': 'Hôpital Fleury', 'address': '2180 rue Fleury Est, Montréal, H2B 1K3\nMontréal', 'latitude': 45.57187145, 'longitude': -73.65000571, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1171', 'waiting_time': '8:56', 'num_waiting': '15', 'total_people': '51', 'occupancy_rate': '122%', 'avg_wait_room': '5:04', 'avg_stretcher_time': '22:08'}, {'name': 'Hôpital général juif', 'address': '3755 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1E2\nMontréal', 'latitude': 45.49684885, 'longitude': -73.6304158, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=192', 'waiting_time': '5:14', 'num_waiting': '67', 'total_people': '191', 'occupancy_rate': '258%', 'avg_wait_room': '3:24', 'avg_stretcher_time': '18:23'}, {'name': 'Hôpital Jean-Talon', 'address': '1385 rue Jean-Talon Est, Montréal, H2E 1S6\nMontréal', 'latitude': 45.545663, 'longitude': -73.6094317, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1172', 'waiting_time': '7:52', 'num_waiting': '24', 'total_people': '63', 'occupancy_rate': '114%', 'avg_wait_room': '5:25', 'avg_stretcher_time': '19:21'}, {'name': 'Hôpital Maisonneuve-Rosemont', 'address': "5415 boulevard de l'Assomption, Montréal, H1T 2M4\nMontréal", 'latitude': 45.5752376, 'longitude': -73.5603456, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=341', 'waiting_time': '11:50', 'num_waiting': '33', 'total_people': '118', 'occupancy_rate': '137%', 'avg_wait_room': '4:03', 'avg_stretcher_time': '26:18:00'}, {'name': 'Hôpital Notre-Dame', 'address': '1560 rue Sherbrooke Est, Montréal, H2L 4M1\nMontréal', 'latitude': 45.52614335, 'longitude': -73.56342922, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=869391', 'waiting_time': '3:50', 'num_waiting': '10', 'total_people': '57', 'occupancy_rate': '100%', 'avg_wait_room': '7:32', 'avg_stretcher_time': '22:58'}, {'name': 'Hôpital Notre-Dame-de-Fatima', 'address': '1201 6e Avenue Pilote, La Pocatière, G0R 1Z0\nBas-Saint-Laurent', 'latitude': 47.3719409, 'longitude': -70.028115, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=704', 'waiting_time': '1:56', 'num_waiting': '3', 'total_people': '10', 'occupancy_rate': '86%', 'avg_wait_room': '2:06', 'avg_stretcher_time': '8:13'}, {'name': 'Hôpital Royal Victoria', 'address': '1001 boulevard Décarie, Montréal, H4A 3J1\nMontréal', 'latitude': 45.4723792, 'longitude': -73.6020273, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=833', 'waiting_time': '14:36', 'num_waiting': '34', 'total_people': '124', 'occupancy_rate': '194%', 'avg_wait_room': '11:40', 'avg_stretcher_time': '26:25:00'}, {'name': 'Institut de cardiologie de Montréal', 'address': '5000 rue Bélanger, Montréal, H1T 1C8\nMontréal', 'latitude': 45.5738644, 'longitude': -73.57811978, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289381', 'waiting_time': '2:55', 'num_waiting': '7', 'total_people': '30', 'occupancy_rate': '73%', 'avg_wait_room': '2:53', 'avg_stretcher_time': '15:40'}, {'name': "Hôpital de soins psychiatriques de l'Est-de-Montréal", 'address': '7401 rue Hochelaga, Montréal, H1N 3M5\nMontréal', 'latitude': 45.5883939, 'longitude': -73.5312813, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=296', 'waiting_time': 'currently not available', 'num_waiting': '3', 'total_people': '15', 'occupancy_rate': '58%', 'avg_wait_room': '0:00', 'avg_stretcher_time': '0:00'}, {'name': "L'Hôpital de Montréal pour enfants", 'address': '1001 boulevard Décarie, Montréal, H4A 3J1\nMontréal', 'latitude': 45.4723792, 'longitude': -73.6020273, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=831', 'waiting_time': '4:28', 'num_waiting': '22', 'total_people': '74', 'occupancy_rate': '192%', 'avg_wait_room': '3:48', 'avg_stretcher_time': '7:37'}, {'name': "L'Hôtel-Dieu de Québec", 'address': '11 Côte du Palais, Québec, G1R 2J6\nCapitale-Nationale', 'latitude': 46.8155002, 'longitude': -71.21083454, 'website': 'https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=461', 'waiting_time': '3:25', 'num_waiting': '4', 'total_people': '28', 'occupancy_rate': '113%', 'avg_wait_room': '2:52', 'avg_stretcher_time': '14:31'}];
+    
+    hospitalData.forEach(function(hospital) {
+        var distance = haversine(userLat, userLon, hospital.latitude, hospital.longitude);
+        if (distance <= radius) {
+            var waitTime = parseInt(hospital.waiting_time.split(":")[0]);  // Extract hours
+            if (waitTime < minWaitTime) {
+                minWaitTime = waitTime;
+                nearestHospital = hospital;
+            }
+        }
+    });
+
+    if (nearestHospital) {
+        document.getElementById("output").innerHTML = 
+        "Nearest hospital is " + nearestHospital.name + " with a wait time of " + nearestHospital.waiting_time;
+    } else {
+        document.getElementById("output").innerHTML = "No hospitals found within " + radius + " km radius.";
+    }
+}
+</script>
+    
+            <div class="folium-map" id="map_0da65aba0121c226c56a308db8f926e2" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_0da65aba0121c226c56a308db8f926e2 = L.map(
+                "map_0da65aba0121c226c56a308db8f926e2",
+                {
+                    center: [46.8139, -71.2082],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 6,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_18bc780f6b16e495da2596235761cb45 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_18bc780f6b16e495da2596235761cb45.addTo(map_0da65aba0121c226c56a308db8f926e2);
+        
+    
+            var marker_cluster_9f85ca0a55417212329fd2ad96b18c69 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var marker_f07994d02904fe35cf12459eb70f444a = L.marker(
+                [45.58859395, -70.90560461],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_e84e3c720a66df2246b5f23b913b9737 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_f07994d02904fe35cf12459eb70f444a.setIcon(icon_e84e3c720a66df2246b5f23b913b9737);
+        
+    
+        var popup_358d2112701fce145ed6f0b5f125a5f3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_101c2de13b05be1fafee4b0d8dc9ee8e = $(`<div id="html_101c2de13b05be1fafee4b0d8dc9ee8e" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre de santé et de services sociaux du Granit<br>     <b>Address:</b> 3569 rue Laval, Lac-Mégantic, G6B 1A5 Estrie<br>     <b>Waiting Time:</b> 0:49<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=61" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_358d2112701fce145ed6f0b5f125a5f3.setContent(html_101c2de13b05be1fafee4b0d8dc9ee8e);
+            
+        
+
+        marker_f07994d02904fe35cf12459eb70f444a.bindPopup(popup_358d2112701fce145ed6f0b5f125a5f3)
+        ;
+
+        
+    
+    
+            var marker_96c6d48831ab53ddc2df0fee3c627bd1 = L.marker(
+                [46.76843805, -71.28250969],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1fb28b9698403d9d2b314b06166a6357 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_96c6d48831ab53ddc2df0fee3c627bd1.setIcon(icon_1fb28b9698403d9d2b314b06166a6357);
+        
+    
+        var popup_9ba2a7554acf13fa0b2944c22c2066fc = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_0ccde999b811d6c312c4d8d6da9d437d = $(`<div id="html_0ccde999b811d6c312c4d8d6da9d437d" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre hospitalier de l'Université Laval<br>     <b>Address:</b> 2705 boulevard Laurier, Québec, G1V 4G2 Capitale-Nationale<br>     <b>Waiting Time:</b> 7:17<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=462" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_9ba2a7554acf13fa0b2944c22c2066fc.setContent(html_0ccde999b811d6c312c4d8d6da9d437d);
+            
+        
+
+        marker_96c6d48831ab53ddc2df0fee3c627bd1.bindPopup(popup_9ba2a7554acf13fa0b2944c22c2066fc)
+        ;
+
+        
+    
+    
+            var marker_ea5fdff65eb179a461a7fb3007c8c580 = L.marker(
+                [45.4950203, -73.62383468],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_e437eb7b7f39efdb811d72e9090bc495 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_ea5fdff65eb179a461a7fb3007c8c580.setIcon(icon_e437eb7b7f39efdb811d72e9090bc495);
+        
+    
+        var popup_41a934e3607552ef9c474c6ee7dec7ce = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_47c849c14d66928105bc223838d02dae = $(`<div id="html_47c849c14d66928105bc223838d02dae" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre hospitalier de St.Mary<br>     <b>Address:</b> 3830 avenue Lacombe, Montréal, H3T 1M5 Montréal<br>     <b>Waiting Time:</b> 6:05<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289539" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_41a934e3607552ef9c474c6ee7dec7ce.setContent(html_47c849c14d66928105bc223838d02dae);
+            
+        
+
+        marker_ea5fdff65eb179a461a7fb3007c8c580.bindPopup(popup_41a934e3607552ef9c474c6ee7dec7ce)
+        ;
+
+        
+    
+    
+            var marker_0ebe402e87b40c9f83e4cac48e29f99b = L.marker(
+                [52.796743, -67.0902628],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1211d0e7ff71560884d3ae9bf8746548 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_0ebe402e87b40c9f83e4cac48e29f99b.setIcon(icon_1211d0e7ff71560884d3ae9bf8746548);
+        
+    
+        var popup_ec3ee875ef1b6793d228686eb33b5916 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_089e7097c0024562aa5fcbf09b4ca449 = $(`<div id="html_089e7097c0024562aa5fcbf09b4ca449" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de Fermont<br>     <b>Address:</b> 1 rue Aquilon, Fermont, G0G 1J0 Côte-Nord<br>     <b>Waiting Time:</b> 4:36<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=367" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_ec3ee875ef1b6793d228686eb33b5916.setContent(html_089e7097c0024562aa5fcbf09b4ca449);
+            
+        
+
+        marker_0ebe402e87b40c9f83e4cac48e29f99b.bindPopup(popup_ec3ee875ef1b6793d228686eb33b5916)
+        ;
+
+        
+    
+    
+            var marker_792083e76896ec334f5ee16e508309e8 = L.marker(
+                [48.7371185, -69.0753125],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_337b762aff4e6c025d889422e757a63c = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_792083e76896ec334f5ee16e508309e8.setIcon(icon_337b762aff4e6c025d889422e757a63c);
+        
+    
+        var popup_eec0500a0b80fdc4554691a91cd4ebe3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b2952ab166ca6587ebf3dfc9c4b463c3 = $(`<div id="html_b2952ab166ca6587ebf3dfc9c4b463c3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de Forestville<br>     <b>Address:</b> 2 7e rue, Forestville, G0T 1E0 Côte-Nord<br>     <b>Waiting Time:</b> 5:18<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=542" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_eec0500a0b80fdc4554691a91cd4ebe3.setContent(html_b2952ab166ca6587ebf3dfc9c4b463c3);
+            
+        
+
+        marker_792083e76896ec334f5ee16e508309e8.bindPopup(popup_eec0500a0b80fdc4554691a91cd4ebe3)
+        ;
+
+        
+    
+    
+            var marker_c24816695037c2c8c7e7789c9e5fd9d4 = L.marker(
+                [51.4118896, -57.203258],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_97beaaf23aeb07d3529017396ac17333 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_c24816695037c2c8c7e7789c9e5fd9d4.setIcon(icon_97beaaf23aeb07d3529017396ac17333);
+        
+    
+        var popup_1ebe665a6f176af1ce660535495036b7 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_143f96f61002f8061c0631e86e2945e2 = $(`<div id="html_143f96f61002f8061c0631e86e2945e2" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de la Basse-Côte-Nord<br>     <b>Address:</b> 1070 boulevard Docteur-Camille-Marcoux, Blanc-Sablon, G0G 1W0 Côte-Nord<br>     <b>Waiting Time:</b> 1:32<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=351" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_1ebe665a6f176af1ce660535495036b7.setContent(html_143f96f61002f8061c0631e86e2945e2);
+            
+        
+
+        marker_c24816695037c2c8c7e7789c9e5fd9d4.bindPopup(popup_1ebe665a6f176af1ce660535495036b7)
+        ;
+
+        
+    
+    
+            var marker_411e503c65fe3e88ad8bcab488c1e443 = L.marker(
+                [50.2377028, -63.6033943],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1d6575a6f47ec81ae7f6ecf5365c18d9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_411e503c65fe3e88ad8bcab488c1e443.setIcon(icon_1d6575a6f47ec81ae7f6ecf5365c18d9);
+        
+    
+        var popup_d8e07c1595c7a4aa79b4290e8ad1769a = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_06fe0740d0ce310ad3002035a958e7bb = $(`<div id="html_06fe0740d0ce310ad3002035a958e7bb" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de la Minganie<br>     <b>Address:</b> 1035 promenade des Anciens, Havre-Saint-Pierre, G0G 1P0 Côte-Nord<br>     <b>Waiting Time:</b> 3:19<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=566" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_d8e07c1595c7a4aa79b4290e8ad1769a.setContent(html_06fe0740d0ce310ad3002035a958e7bb);
+            
+        
+
+        marker_411e503c65fe3e88ad8bcab488c1e443.bindPopup(popup_d8e07c1595c7a4aa79b4290e8ad1769a)
+        ;
+
+        
+    
+    
+            var marker_7c86e5ff268304ddb27f8febc8ff3b57 = L.marker(
+                [46.6808892, -72.0492749],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1cd15defe40ad4c7b5d0fb353b617537 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_7c86e5ff268304ddb27f8febc8ff3b57.setIcon(icon_1cd15defe40ad4c7b5d0fb353b617537);
+        
+    
+        var popup_ef094f137bcd3d4ee284f2782427d9da = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_7f530da8d06e0e25763ef4ca5e1b98c0 = $(`<div id="html_7f530da8d06e0e25763ef4ca5e1b98c0" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de Saint-Marc-des-Carrières<br>     <b>Address:</b> 1045 boulevard Bona-Dussault, Saint-Marc-des-Carrières, G0A 4B0 Capitale-Nationale<br>     <b>Waiting Time:</b> 3:10<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=823" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_ef094f137bcd3d4ee284f2782427d9da.setContent(html_7f530da8d06e0e25763ef4ca5e1b98c0);
+            
+        
+
+        marker_7c86e5ff268304ddb27f8febc8ff3b57.bindPopup(popup_ef094f137bcd3d4ee284f2782427d9da)
+        ;
+
+        
+    
+    
+            var marker_d122533d2c9cc6a71f5dc669f695eee7 = L.marker(
+                [47.0415461, -70.9004098],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_425cd2a8ab2e9417ae2ff5318ede6b14 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_d122533d2c9cc6a71f5dc669f695eee7.setIcon(icon_425cd2a8ab2e9417ae2ff5318ede6b14);
+        
+    
+        var popup_26ed1150c66ab032895cfa2509536aee = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_55d631a8614fadc98498f1859c8d8e08 = $(`<div id="html_55d631a8614fadc98498f1859c8d8e08" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de Sainte-Anne-de-Beaupré<br>     <b>Address:</b> 11000 rue des Montagnards, Beaupré, G0A 1E0 Capitale-Nationale<br>     <b>Waiting Time:</b> 3:10<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=938" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_26ed1150c66ab032895cfa2509536aee.setContent(html_55d631a8614fadc98498f1859c8d8e08);
+            
+        
+
+        marker_d122533d2c9cc6a71f5dc669f695eee7.bindPopup(popup_26ed1150c66ab032895cfa2509536aee)
+        ;
+
+        
+    
+    
+            var marker_ba1a8df8866a948bbb23df51ebef7167 = L.marker(
+                [46.72537315, -79.09439986],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_3f6e8e6b0237d17e1cbf88d1b862afae = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_ba1a8df8866a948bbb23df51ebef7167.setIcon(icon_3f6e8e6b0237d17e1cbf88d1b862afae);
+        
+    
+        var popup_06d007b63719d602e8907153437f2f18 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e2a9f4d9e6a78f5d0edd2166410a360a = $(`<div id="html_e2a9f4d9e6a78f5d0edd2166410a360a" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux de Témiscaming-Kipawa<br>     <b>Address:</b> 180 rue Anvik, Témiscaming, J0Z 3R0 Abitibi-Témiscamingue<br>     <b>Waiting Time:</b> 1:01<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=342" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_06d007b63719d602e8907153437f2f18.setContent(html_e2a9f4d9e6a78f5d0edd2166410a360a);
+            
+        
+
+        marker_ba1a8df8866a948bbb23df51ebef7167.bindPopup(popup_06d007b63719d602e8907153437f2f18)
+        ;
+
+        
+    
+    
+            var marker_1c660f6ccad3ec1e34188c2cd1e8db7a = L.marker(
+                [48.3515871, -69.4070876],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_21d054edb08fb2bc2f756c2970c7cce5 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_1c660f6ccad3ec1e34188c2cd1e8db7a.setIcon(icon_21d054edb08fb2bc2f756c2970c7cce5);
+        
+    
+        var popup_cee3f54a9fffda48dd7bd909e3bf03f9 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b557cb20e344421f05270d751d6ce340 = $(`<div id="html_b557cb20e344421f05270d751d6ce340" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Centre multiservices de santé et de services sociaux des Escoumins<br>     <b>Address:</b> 4 rue de l'Hôpital, Les Escoumins, G0T 1K0 Côte-Nord<br>     <b>Waiting Time:</b> 1:11<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=541" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_cee3f54a9fffda48dd7bd909e3bf03f9.setContent(html_b557cb20e344421f05270d751d6ce340);
+            
+        
+
+        marker_1c660f6ccad3ec1e34188c2cd1e8db7a.bindPopup(popup_cee3f54a9fffda48dd7bd909e3bf03f9)
+        ;
+
+        
+    
+    
+            var marker_3034a23a01ed2682d3f6307bc4ce671f = L.marker(
+                [46.72513675, -71.25915451],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_7378154c10c34027ae7c66c2a1a80916 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_3034a23a01ed2682d3f6307bc4ce671f.setIcon(icon_7378154c10c34027ae7c66c2a1a80916);
+        
+    
+        var popup_921fb4fdde10dab6bc5353a17d43fdf3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5945c6a3e69a28da40a2598f1a01919c = $(`<div id="html_5945c6a3e69a28da40a2598f1a01919c" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CHSLD et Hôpital Paul-Gilbert<br>     <b>Address:</b> 9330 boulevard du Centre-Hospitalier, Lévis, G6X 1L6 Chaudière-Appalaches<br>     <b>Waiting Time:</b> 1:32<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=613" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_921fb4fdde10dab6bc5353a17d43fdf3.setContent(html_5945c6a3e69a28da40a2598f1a01919c);
+            
+        
+
+        marker_3034a23a01ed2682d3f6307bc4ce671f.bindPopup(popup_921fb4fdde10dab6bc5353a17d43fdf3)
+        ;
+
+        
+    
+    
+            var marker_33e6a343e24753655c239ca9fff6be29 = L.marker(
+                [45.503440350000005, -73.62446772],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_dad985833ba186ec07ca0f631d21b9d2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_33e6a343e24753655c239ca9fff6be29.setIcon(icon_dad985833ba186ec07ca0f631d21b9d2);
+        
+    
+        var popup_0b594cb84f979c87fcc98fc8176882b6 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_15ef5cae6bdca1bb34bc4fbc2a3acf0f = $(`<div id="html_15ef5cae6bdca1bb34bc4fbc2a3acf0f" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CHU Sainte-Justine<br>     <b>Address:</b> 3175 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1C5 Montréal<br>     <b>Waiting Time:</b> 3:25<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=801" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_0b594cb84f979c87fcc98fc8176882b6.setContent(html_15ef5cae6bdca1bb34bc4fbc2a3acf0f);
+            
+        
+
+        marker_33e6a343e24753655c239ca9fff6be29.bindPopup(popup_0b594cb84f979c87fcc98fc8176882b6)
+        ;
+
+        
+    
+    
+            var marker_5a72acfa4832aedb15ed6a7f9d210621 = L.marker(
+                [45.4473173, -71.8709085],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_3c8cb671779a2d9f484b3fd61ced2bde = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_5a72acfa4832aedb15ed6a7f9d210621.setIcon(icon_3c8cb671779a2d9f484b3fd61ced2bde);
+        
+    
+        var popup_99247c0e1a3f2b7fa63b9675e1ea4625 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_31c6113af5837e45e8d9ec38e1e9e9b3 = $(`<div id="html_31c6113af5837e45e8d9ec38e1e9e9b3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CHUS - Hôpital Fleurimont<br>     <b>Address:</b> 3001 12e Avenue Nord, Sherbrooke, J1H 5N4 Estrie<br>     <b>Waiting Time:</b> 10:09<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=424" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_99247c0e1a3f2b7fa63b9675e1ea4625.setContent(html_31c6113af5837e45e8d9ec38e1e9e9b3);
+            
+        
+
+        marker_5a72acfa4832aedb15ed6a7f9d210621.bindPopup(popup_99247c0e1a3f2b7fa63b9675e1ea4625)
+        ;
+
+        
+    
+    
+            var marker_7bc141b15e80dc7abdea31770d488768 = L.marker(
+                [45.39944815, -71.8786916],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_17d3f5d8b7d1085291d3e9bb3a989396 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_7bc141b15e80dc7abdea31770d488768.setIcon(icon_17d3f5d8b7d1085291d3e9bb3a989396);
+        
+    
+        var popup_e471ffb04fa5305871070bd0a7dbb782 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_bd2e322f908c73b72dd91b1baf99de1f = $(`<div id="html_bd2e322f908c73b72dd91b1baf99de1f" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CHUS - Hôtel-Dieu de Sherbrooke<br>     <b>Address:</b> 580 rue Bowen Sud, Sherbrooke, J1G 2E8 Estrie<br>     <b>Waiting Time:</b> 10:07<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=425" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_e471ffb04fa5305871070bd0a7dbb782.setContent(html_bd2e322f908c73b72dd91b1baf99de1f);
+            
+        
+
+        marker_7bc141b15e80dc7abdea31770d488768.bindPopup(popup_e471ffb04fa5305871070bd0a7dbb782)
+        ;
+
+        
+    
+    
+            var marker_8cc17f1c1c7724eb867e4fbb4cff70ee = L.marker(
+                [47.48606242808889, -69.28288449],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_6cba3edd63988944dc5f187fe76364bc = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_8cc17f1c1c7724eb867e4fbb4cff70ee.setIcon(icon_6cba3edd63988944dc5f187fe76364bc);
+        
+    
+        var popup_78ee1228c48e22db5415307f320c5ab2 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_c815bd701d717e556ce5fa7793ae70df = $(`<div id="html_c815bd701d717e556ce5fa7793ae70df" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CLSC de Pohénégamook<br>     <b>Address:</b> 1922 rue Saint-Vallier, Pohénégamook, G0L 1J0 Bas-Saint-Laurent<br>     <b>Waiting Time:</b> 1:17<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=595" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_78ee1228c48e22db5415307f320c5ab2.setContent(html_c815bd701d717e556ce5fa7793ae70df);
+            
+        
+
+        marker_8cc17f1c1c7724eb867e4fbb4cff70ee.bindPopup(popup_78ee1228c48e22db5415307f320c5ab2)
+        ;
+
+        
+    
+    
+            var marker_50e0b675cc9cdf078374209c2514665f = L.marker(
+                [48.961394, -65.493858],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_932c3791d71e590bb865f90c5f0e1931 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_50e0b675cc9cdf078374209c2514665f.setIcon(icon_932c3791d71e590bb865f90c5f0e1931);
+        
+    
+        var popup_2970f89a12f60e812783bfad59ff3736 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_ba2a42e7f0a5a0f569d18fdb8117b4a1 = $(`<div id="html_ba2a42e7f0a5a0f569d18fdb8117b4a1" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CLSC et centre de services ambulatoires de Murdochville<br>     <b>Address:</b> 600 avenue William-May, Murdochville, G0E 1W0 Gaspésie-Îles-de-la-Madeleine<br>     <b>Waiting Time:</b> 1:45<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=713" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_2970f89a12f60e812783bfad59ff3736.setContent(html_ba2a42e7f0a5a0f569d18fdb8117b4a1);
+            
+        
+
+        marker_50e0b675cc9cdf078374209c2514665f.bindPopup(popup_2970f89a12f60e812783bfad59ff3736)
+        ;
+
+        
+    
+    
+            var marker_bacc883c9e49206360d231497ab47a62 = L.marker(
+                [48.02114186948842, -65.287599],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_a1eeb3b470b8167e0a9f5674725d7d4d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_bacc883c9e49206360d231497ab47a62.setIcon(icon_a1eeb3b470b8167e0a9f5674725d7d4d);
+        
+    
+        var popup_592e81c322c58657e8ead02ecd559e92 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5cb7d27a8e6ae0731e84a3f207efbfba = $(`<div id="html_5cb7d27a8e6ae0731e84a3f207efbfba" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> CLSC et centre de services ambulatoires de Paspébiac<br>     <b>Address:</b> 273 boulevard Gérard-D.-Levesque, Paspébiac, G0C 2K0 Gaspésie-Îles-de-la-Madeleine<br>     <b>Waiting Time:</b> 3:41<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=358270" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_592e81c322c58657e8ead02ecd559e92.setContent(html_5cb7d27a8e6ae0731e84a3f207efbfba);
+            
+        
+
+        marker_bacc883c9e49206360d231497ab47a62.bindPopup(popup_592e81c322c58657e8ead02ecd559e92)
+        ;
+
+        
+    
+    
+            var marker_dbebefff648237413c7b0dd0681513ae = L.marker(
+                [45.1256397, -74.0000538],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_960b37dcb02c3ee9e40cf70cd63c8b45 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_dbebefff648237413c7b0dd0681513ae.setIcon(icon_960b37dcb02c3ee9e40cf70cd63c8b45);
+        
+    
+        var popup_77fc697724b70b0b2291e3ef715edef1 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_c66e348c93c29654b3c37ea467e55efb = $(`<div id="html_c66e348c93c29654b3c37ea467e55efb" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Barrie Memorial / Barrie Memorial Hospital<br>     <b>Address:</b> 28 rue Gale, Ormstown, J0S 1K0 Montérégie<br>     <b>Waiting Time:</b> 6:39<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1124" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_77fc697724b70b0b2291e3ef715edef1.setContent(html_c66e348c93c29654b3c37ea467e55efb);
+            
+        
+
+        marker_dbebefff648237413c7b0dd0681513ae.bindPopup(popup_77fc697724b70b0b2291e3ef715edef1)
+        ;
+
+        
+    
+    
+            var marker_373ce3509ef457795f06f17316fa10e3 = L.marker(
+                [48.46856425, -67.41924531],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_afae4e6c7ba6443a8264c97a95c39ce5 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_373ce3509ef457795f06f17316fa10e3.setIcon(icon_afae4e6c7ba6443a8264c97a95c39ce5);
+        
+    
+        var popup_f1160070a89f10b91a8b241b32ad5bcb = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_cd0844288428e2638151fecae43d6382 = $(`<div id="html_cd0844288428e2638151fecae43d6382" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital d'Amqui<br>     <b>Address:</b> 135 avenue Gaëtan-Archambault, Amqui, G5J 2K5 Bas-Saint-Laurent<br>     <b>Waiting Time:</b> 4:14<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1035" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_f1160070a89f10b91a8b241b32ad5bcb.setContent(html_cd0844288428e2638151fecae43d6382);
+            
+        
+
+        marker_373ce3509ef457795f06f17316fa10e3.bindPopup(popup_f1160070a89f10b91a8b241b32ad5bcb)
+        ;
+
+        
+    
+    
+            var marker_85ef3351a6b01a4625482acf5b3facd9 = L.marker(
+                [48.4267813, -71.04827831],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_698cd9cc9712fbd8c651c32078b05724 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_85ef3351a6b01a4625482acf5b3facd9.setIcon(icon_698cd9cc9712fbd8c651c32078b05724);
+        
+    
+        var popup_a8a7730d4674e6804b7cc6b05fd737fe = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_7db5d7014a95039d3335ea23865e2d34 = $(`<div id="html_7db5d7014a95039d3335ea23865e2d34" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de Chicoutimi<br>     <b>Address:</b> 305 rue Saint-Vallier, Saguenay, G7H 5H6 Saguenay-Lac-Saint-Jean<br>     <b>Waiting Time:</b> 6:10<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=518" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_a8a7730d4674e6804b7cc6b05fd737fe.setContent(html_7db5d7014a95039d3335ea23865e2d34);
+            
+        
+
+        marker_85ef3351a6b01a4625482acf5b3facd9.bindPopup(popup_a8a7730d4674e6804b7cc6b05fd737fe)
+        ;
+
+        
+    
+    
+            var marker_8e815a301435580eed31091eef78f113 = L.marker(
+                [48.8128456, -64.49666755],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_3d16e1569f4fe7b6c991cf5b6dc282a7 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_8e815a301435580eed31091eef78f113.setIcon(icon_3d16e1569f4fe7b6c991cf5b6dc282a7);
+        
+    
+        var popup_741c752167c0cb22a176be57df6e0921 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_2f9a775c4509f6c9a40821f8ceadb775 = $(`<div id="html_2f9a775c4509f6c9a40821f8ceadb775" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de Gaspé<br>     <b>Address:</b> 215 boulevard de York Ouest, Gaspé, G4X 2W2 Gaspésie-Îles-de-la-Madeleine<br>     <b>Waiting Time:</b> 4:16<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=98610" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_741c752167c0cb22a176be57df6e0921.setContent(html_2f9a775c4509f6c9a40821f8ceadb775);
+            
+        
+
+        marker_8e815a301435580eed31091eef78f113.bindPopup(popup_741c752167c0cb22a176be57df6e0921)
+        ;
+
+        
+    
+    
+            var marker_1efa7d88fb5a4e690703d353f911374a = L.marker(
+                [45.4458496, -75.7460147],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_74119ffc88a8363654a2c8be44346bef = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_1efa7d88fb5a4e690703d353f911374a.setIcon(icon_74119ffc88a8363654a2c8be44346bef);
+        
+    
+        var popup_2ec656419b30437fd309588d633f1bb0 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_66979f154985cbfce309513bbf84ad29 = $(`<div id="html_66979f154985cbfce309513bbf84ad29" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de Hull<br>     <b>Address:</b> 116 boulevard Lionel-Émond, Gatineau, J8Y 1W7 Outaouais<br>     <b>Waiting Time:</b> 11:58<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=737" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_2ec656419b30437fd309588d633f1bb0.setContent(html_66979f154985cbfce309513bbf84ad29);
+            
+        
+
+        marker_1efa7d88fb5a4e690703d353f911374a.bindPopup(popup_2ec656419b30437fd309588d633f1bb0)
+        ;
+
+        
+    
+    
+            var marker_d6ceba15f78a65a923643562ce1d3f24 = L.marker(
+                [47.3758802, -61.8677393],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1a5286739988c694e8617b5ca41f1179 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_d6ceba15f78a65a923643562ce1d3f24.setIcon(icon_1a5286739988c694e8617b5ca41f1179);
+        
+    
+        var popup_8b14f0704f01ee13f9b75f486c564516 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b169ffff7058fe0d24923db16b7ab720 = $(`<div id="html_b169ffff7058fe0d24923db16b7ab720" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de l'Archipel<br>     <b>Address:</b> 430 chemin Principal, Les Îles-de-la-Madeleine, G4T 1R9 Gaspésie-Îles-de-la-Madeleine<br>     <b>Waiting Time:</b> 1:34<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1103" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_8b14f0704f01ee13f9b75f486c564516.setContent(html_b169ffff7058fe0d24923db16b7ab720);
+            
+        
+
+        marker_d6ceba15f78a65a923643562ce1d3f24.bindPopup(popup_8b14f0704f01ee13f9b75f486c564516)
+        ;
+
+        
+    
+    
+            var marker_3a081ac41ba493760838359ecbf04d7d = L.marker(
+                [48.34374875, -70.88319507],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_2f17e95234f3687082f9da424482ae2d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_3a081ac41ba493760838359ecbf04d7d.setIcon(icon_2f17e95234f3687082f9da424482ae2d);
+        
+    
+        var popup_fe619a5d021290d9dc813ec26a63a4cd = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e49835ded4338e5da32e5c623e5156b3 = $(`<div id="html_e49835ded4338e5da32e5c623e5156b3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de La Baie<br>     <b>Address:</b> 1000 rue du Docteur-Desgagné, Saguenay, G7B 2Y6 Saguenay-Lac-Saint-Jean<br>     <b>Waiting Time:</b> 3:20<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=714" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_fe619a5d021290d9dc813ec26a63a4cd.setContent(html_e49835ded4338e5da32e5c623e5156b3);
+            
+        
+
+        marker_3a081ac41ba493760838359ecbf04d7d.bindPopup(popup_fe619a5d021290d9dc813ec26a63a4cd)
+        ;
+
+        
+    
+    
+            var marker_961e6d7bc9dd629d00158f0bfde0ef3f = L.marker(
+                [45.42072445, -73.62329656],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_78118faf3e11c9d25160d0a6dc01ad1e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_961e6d7bc9dd629d00158f0bfde0ef3f.setIcon(icon_78118faf3e11c9d25160d0a6dc01ad1e);
+        
+    
+        var popup_fcb09a029b45ea38047f164cd12f9684 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5ae4d859dda37795e32da675bf648593 = $(`<div id="html_5ae4d859dda37795e32da675bf648593" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de LaSalle<br>     <b>Address:</b> 8585 terrasse Champlain, Montréal, H8P 1C1 Montréal<br>     <b>Waiting Time:</b> 7:33<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=898" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_fcb09a029b45ea38047f164cd12f9684.setContent(html_5ae4d859dda37795e32da675bf648593);
+            
+        
+
+        marker_961e6d7bc9dd629d00158f0bfde0ef3f.bindPopup(popup_fcb09a029b45ea38047f164cd12f9684)
+        ;
+
+        
+    
+    
+            var marker_6a7b22701543031634c4a07d33619ba5 = L.marker(
+                [47.611888, -68.798841],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1ef9314a2a64b14e8e14a2b6ac51adf9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_6a7b22701543031634c4a07d33619ba5.setIcon(icon_1ef9314a2a64b14e8e14a2b6ac51adf9);
+        
+    
+        var popup_5fab743e9284c5bcf73cbf488396f79b = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_a355a92f7516420f9beee7649764a54c = $(`<div id="html_a355a92f7516420f9beee7649764a54c" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Notre-Dame-du-Lac<br>     <b>Address:</b> 58 rue de l'Église, Témiscouata-sur-le-Lac, G0L 1X0 Bas-Saint-Laurent<br>     <b>Waiting Time:</b> 1:48<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=751" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_5fab743e9284c5bcf73cbf488396f79b.setContent(html_a355a92f7516420f9beee7649764a54c);
+            
+        
+
+        marker_6a7b22701543031634c4a07d33619ba5.bindPopup(popup_5fab743e9284c5bcf73cbf488396f79b)
+        ;
+
+        
+    
+    
+            var marker_f71933d24d5ead7cd66d62c45898a41d = L.marker(
+                [45.5707884, -73.911428],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_e113e6b27f51a1645ce6816d77818af6 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_f71933d24d5ead7cd66d62c45898a41d.setIcon(icon_e113e6b27f51a1645ce6816d77818af6);
+        
+    
+        var popup_555a45e1fc07421107f2228814b53bda = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_05178924c0bb357bb22094ab05c017e3 = $(`<div id="html_05178924c0bb357bb22094ab05c017e3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de Saint-Eustache<br>     <b>Address:</b> 520 boulevard Arthur-Sauvé, Saint-Eustache, J7R 5B1 Laurentides<br>     <b>Waiting Time:</b> 13:18<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1204" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_555a45e1fc07421107f2228814b53bda.setContent(html_05178924c0bb357bb22094ab05c017e3);
+            
+        
+
+        marker_f71933d24d5ead7cd66d62c45898a41d.bindPopup(popup_555a45e1fc07421107f2228814b53bda)
+        ;
+
+        
+    
+    
+            var marker_c652c0a746f96664383d7960b947b761 = L.marker(
+                [45.4639933, -73.563513],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_9e0eb92c9a566449c48e9e2fa4f698a1 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_c652c0a746f96664383d7960b947b761.setIcon(icon_9e0eb92c9a566449c48e9e2fa4f698a1);
+        
+    
+        var popup_c1556ab047cc3613429da4d38e699462 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_0cab368905687b396be8aa9671cd36c9 = $(`<div id="html_0cab368905687b396be8aa9671cd36c9" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de Verdun<br>     <b>Address:</b> 4000 boulevard LaSalle, Montréal, H4G 2A3 Montréal<br>     <b>Waiting Time:</b> 3:10<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=502" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_c1556ab047cc3613429da4d38e699462.setContent(html_0cab368905687b396be8aa9671cd36c9);
+            
+        
+
+        marker_c652c0a746f96664383d7960b947b761.bindPopup(popup_c1556ab047cc3613429da4d38e699462)
+        ;
+
+        
+    
+    
+            var marker_f1d0e3bcfca1965871eb7bc3e57ae5c1 = L.marker(
+                [45.5324388, -73.7136577],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_07c0bdf7b126e66e3c91836a3a31239f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_f1d0e3bcfca1965871eb7bc3e57ae5c1.setIcon(icon_07c0bdf7b126e66e3c91836a3a31239f);
+        
+    
+        var popup_86d6cabd160cb227b0c47cf71dc50ab6 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_8195ce3a9973f0d36079baa139b60241 = $(`<div id="html_8195ce3a9973f0d36079baa139b60241" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital du Sacré-Cœur de Montréal<br>     <b>Address:</b> 5400 boulevard Gouin Ouest, Montréal, H4J 1C5 Montréal<br>     <b>Waiting Time:</b> 7:44<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=174" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_86d6cabd160cb227b0c47cf71dc50ab6.setContent(html_8195ce3a9973f0d36079baa139b60241);
+            
+        
+
+        marker_f1d0e3bcfca1965871eb7bc3e57ae5c1.bindPopup(popup_86d6cabd160cb227b0c47cf71dc50ab6)
+        ;
+
+        
+    
+    
+            var marker_7242e79d8f16e4d63cb6d0b38d8413f3 = L.marker(
+                [45.5882483, -75.4127149],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_5f9acc1461e21ac48a7e7aaa311b9619 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_7242e79d8f16e4d63cb6d0b38d8413f3.setIcon(icon_5f9acc1461e21ac48a7e7aaa311b9619);
+        
+    
+        var popup_96884f621a47760b4df6c9f11470f16d = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_a01868773e80e3d25a115adbad0d6ae1 = $(`<div id="html_a01868773e80e3d25a115adbad0d6ae1" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital et CHSLD de Papineau<br>     <b>Address:</b> 155 rue Maclaren Est, Gatineau, J8L 0C2 Outaouais<br>     <b>Waiting Time:</b> 6:20<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1201" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_96884f621a47760b4df6c9f11470f16d.setContent(html_a01868773e80e3d25a115adbad0d6ae1);
+            
+        
+
+        marker_7242e79d8f16e4d63cb6d0b38d8413f3.bindPopup(popup_96884f621a47760b4df6c9f11470f16d)
+        ;
+
+        
+    
+    
+            var marker_962058df9cfd3b21f8b9a520b6763d4a = L.marker(
+                [45.64902085, -75.93248465],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_d01ace07caf40c667ea6578f77019640 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_962058df9cfd3b21f8b9a520b6763d4a.setIcon(icon_d01ace07caf40c667ea6578f77019640);
+        
+    
+        var popup_ccd683a6e83a24ced9482f1e2ec69a11 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_d44ff193a4478d4aa85a66c20620efc2 = $(`<div id="html_d44ff193a4478d4aa85a66c20620efc2" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital et CHSLD Mémorial de Wakefield / Wakefield Memorial Hospital<br>     <b>Address:</b> 101 chemin Burnside, La Pêche, J0X 3G0 Outaouais<br>     <b>Waiting Time:</b> 1:54<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1198" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_ccd683a6e83a24ced9482f1e2ec69a11.setContent(html_d44ff193a4478d4aa85a66c20620efc2);
+            
+        
+
+        marker_962058df9cfd3b21f8b9a520b6763d4a.bindPopup(popup_ccd683a6e83a24ced9482f1e2ec69a11)
+        ;
+
+        
+    
+    
+            var marker_a022d0a710ff5ad670b6364d6aefc3d3 = L.marker(
+                [50.209753, -66.3826559],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_fe5264851986161c08b5b071677df9ac = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_a022d0a710ff5ad670b6364d6aefc3d3.setIcon(icon_fe5264851986161c08b5b071677df9ac);
+        
+    
+        var popup_7eb4f821a655ccfd5355378832d66dd0 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_f234b9a891fcb668968254d37d646f49 = $(`<div id="html_f234b9a891fcb668968254d37d646f49" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital et CLSC de Sept-Îles<br>     <b>Address:</b> 45 rue du Père-Divet, Sept-Îles, G4R 3N7 Côte-Nord<br>     <b>Waiting Time:</b> 3:18<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=297169" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_7eb4f821a655ccfd5355378832d66dd0.setContent(html_f234b9a891fcb668968254d37d646f49);
+            
+        
+
+        marker_a022d0a710ff5ad670b6364d6aefc3d3.bindPopup(popup_7eb4f821a655ccfd5355378832d66dd0)
+        ;
+
+        
+    
+    
+            var marker_cab6cd41fa22f156d3fce7cf4f31dd54 = L.marker(
+                [48.1681255, -65.99195425],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_2f0032ddd2a530906ccc23e0f5562459 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_cab6cd41fa22f156d3fce7cf4f31dd54.setIcon(icon_2f0032ddd2a530906ccc23e0f5562459);
+        
+    
+        var popup_bc9352b0bf7cb6d74413359c8407fee3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_0c5303c0282f4f856ecb160c1fab2c8d = $(`<div id="html_0c5303c0282f4f856ecb160c1fab2c8d" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital et groupe de médecine de famille universitaire de Maria<br>     <b>Address:</b> 419 boulevard Perron, Maria, G0C 1Y0 Gaspésie-Îles-de-la-Madeleine<br>     <b>Waiting Time:</b> 5:02<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1115" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_bc9352b0bf7cb6d74413359c8407fee3.setContent(html_0c5303c0282f4f856ecb160c1fab2c8d);
+            
+        
+
+        marker_cab6cd41fa22f156d3fce7cf4f31dd54.bindPopup(popup_bc9352b0bf7cb6d74413359c8407fee3)
+        ;
+
+        
+    
+    
+            var marker_65737c36137afca07e07adea19aeab21 = L.marker(
+                [45.57187145, -73.65000571],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_dbb9b955a1a2959a2fe19c7c38200741 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_65737c36137afca07e07adea19aeab21.setIcon(icon_dbb9b955a1a2959a2fe19c7c38200741);
+        
+    
+        var popup_54398bf81a2bae26212a2f82d9f8d7f2 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_3108d4ce8cd6d00013eb0a2500011393 = $(`<div id="html_3108d4ce8cd6d00013eb0a2500011393" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Fleury<br>     <b>Address:</b> 2180 rue Fleury Est, Montréal, H2B 1K3 Montréal<br>     <b>Waiting Time:</b> 8:56<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1171" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_54398bf81a2bae26212a2f82d9f8d7f2.setContent(html_3108d4ce8cd6d00013eb0a2500011393);
+            
+        
+
+        marker_65737c36137afca07e07adea19aeab21.bindPopup(popup_54398bf81a2bae26212a2f82d9f8d7f2)
+        ;
+
+        
+    
+    
+            var marker_7eb54de32814463102be498661d45c9a = L.marker(
+                [45.49684885, -73.6304158],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_b8ab9ad488bf9c1ba198012d7acafc8f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_7eb54de32814463102be498661d45c9a.setIcon(icon_b8ab9ad488bf9c1ba198012d7acafc8f);
+        
+    
+        var popup_559499c376ef00f0f2ecefbafa974649 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_986f417b6006451f0d1d4acc5b093323 = $(`<div id="html_986f417b6006451f0d1d4acc5b093323" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital général juif<br>     <b>Address:</b> 3755 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1E2 Montréal<br>     <b>Waiting Time:</b> 5:14<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=192" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_559499c376ef00f0f2ecefbafa974649.setContent(html_986f417b6006451f0d1d4acc5b093323);
+            
+        
+
+        marker_7eb54de32814463102be498661d45c9a.bindPopup(popup_559499c376ef00f0f2ecefbafa974649)
+        ;
+
+        
+    
+    
+            var marker_e8b005a15936e8de2961a4ccd849699a = L.marker(
+                [45.545663, -73.6094317],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_9e784a53b08576595f37ccecd205a833 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_e8b005a15936e8de2961a4ccd849699a.setIcon(icon_9e784a53b08576595f37ccecd205a833);
+        
+    
+        var popup_3323632584e066032fbfed5c02e1af40 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_44bbc1e65d7692eadd22caa5dab6eae5 = $(`<div id="html_44bbc1e65d7692eadd22caa5dab6eae5" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Jean-Talon<br>     <b>Address:</b> 1385 rue Jean-Talon Est, Montréal, H2E 1S6 Montréal<br>     <b>Waiting Time:</b> 7:52<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1172" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_3323632584e066032fbfed5c02e1af40.setContent(html_44bbc1e65d7692eadd22caa5dab6eae5);
+            
+        
+
+        marker_e8b005a15936e8de2961a4ccd849699a.bindPopup(popup_3323632584e066032fbfed5c02e1af40)
+        ;
+
+        
+    
+    
+            var marker_380d441c31deabcb9776d064b5611c6c = L.marker(
+                [45.5752376, -73.5603456],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_c2122055df5a2ecb5965217cbc310c8a = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_380d441c31deabcb9776d064b5611c6c.setIcon(icon_c2122055df5a2ecb5965217cbc310c8a);
+        
+    
+        var popup_4f115dcdb5578c6283bd77d3b1e3d85b = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_2390621d6289587a566d56e63ca38c13 = $(`<div id="html_2390621d6289587a566d56e63ca38c13" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Maisonneuve-Rosemont<br>     <b>Address:</b> 5415 boulevard de l'Assomption, Montréal, H1T 2M4 Montréal<br>     <b>Waiting Time:</b> 11:50<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=341" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_4f115dcdb5578c6283bd77d3b1e3d85b.setContent(html_2390621d6289587a566d56e63ca38c13);
+            
+        
+
+        marker_380d441c31deabcb9776d064b5611c6c.bindPopup(popup_4f115dcdb5578c6283bd77d3b1e3d85b)
+        ;
+
+        
+    
+    
+            var marker_231124a38d9aabbcf9e3584facc1811b = L.marker(
+                [45.52614335, -73.56342922],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_73853204c87ff3bc62e788fb731e5480 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_231124a38d9aabbcf9e3584facc1811b.setIcon(icon_73853204c87ff3bc62e788fb731e5480);
+        
+    
+        var popup_babe5a9518254c3e58716f9ad480a0bd = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_fc5cf6f7cb4099ceb055878a3b3a7cc7 = $(`<div id="html_fc5cf6f7cb4099ceb055878a3b3a7cc7" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Notre-Dame<br>     <b>Address:</b> 1560 rue Sherbrooke Est, Montréal, H2L 4M1 Montréal<br>     <b>Waiting Time:</b> 3:50<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=869391" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_babe5a9518254c3e58716f9ad480a0bd.setContent(html_fc5cf6f7cb4099ceb055878a3b3a7cc7);
+            
+        
+
+        marker_231124a38d9aabbcf9e3584facc1811b.bindPopup(popup_babe5a9518254c3e58716f9ad480a0bd)
+        ;
+
+        
+    
+    
+            var marker_163cdcfeba3eb51694d32f699132b13c = L.marker(
+                [47.3719409, -70.028115],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_063d1724cce0e40e7ebde4f9c20a188a = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_163cdcfeba3eb51694d32f699132b13c.setIcon(icon_063d1724cce0e40e7ebde4f9c20a188a);
+        
+    
+        var popup_d9718932b96ae5bdfb8de9232ffcce82 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_85cbc946abe52fb38368aa96d1d1c96a = $(`<div id="html_85cbc946abe52fb38368aa96d1d1c96a" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Notre-Dame-de-Fatima<br>     <b>Address:</b> 1201 6e Avenue Pilote, La Pocatière, G0R 1Z0 Bas-Saint-Laurent<br>     <b>Waiting Time:</b> 1:56<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=704" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_d9718932b96ae5bdfb8de9232ffcce82.setContent(html_85cbc946abe52fb38368aa96d1d1c96a);
+            
+        
+
+        marker_163cdcfeba3eb51694d32f699132b13c.bindPopup(popup_d9718932b96ae5bdfb8de9232ffcce82)
+        ;
+
+        
+    
+    
+            var marker_3c3a11498d0d9e9ee90ae1f9abaaa677 = L.marker(
+                [45.4723792, -73.6020273],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_eb6461882816217adfae5303760d5fc2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_3c3a11498d0d9e9ee90ae1f9abaaa677.setIcon(icon_eb6461882816217adfae5303760d5fc2);
+        
+    
+        var popup_e4b15eb5c5e112e78f07dff7d30f286c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e526e6bb448106f3629e3e0ae7850cac = $(`<div id="html_e526e6bb448106f3629e3e0ae7850cac" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital Royal Victoria<br>     <b>Address:</b> 1001 boulevard Décarie, Montréal, H4A 3J1 Montréal<br>     <b>Waiting Time:</b> 14:36<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=833" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_e4b15eb5c5e112e78f07dff7d30f286c.setContent(html_e526e6bb448106f3629e3e0ae7850cac);
+            
+        
+
+        marker_3c3a11498d0d9e9ee90ae1f9abaaa677.bindPopup(popup_e4b15eb5c5e112e78f07dff7d30f286c)
+        ;
+
+        
+    
+    
+            var marker_9a682513a4286e0d7cdcc47d5cface83 = L.marker(
+                [45.5738644, -73.57811978],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_617bfcb304dcea4a8513d6572e22ba66 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_9a682513a4286e0d7cdcc47d5cface83.setIcon(icon_617bfcb304dcea4a8513d6572e22ba66);
+        
+    
+        var popup_d08f58f7846274335d03346b939b86b1 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_fc56a501f813cbdecc96aafee03a13d3 = $(`<div id="html_fc56a501f813cbdecc96aafee03a13d3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Institut de cardiologie de Montréal<br>     <b>Address:</b> 5000 rue Bélanger, Montréal, H1T 1C8 Montréal<br>     <b>Waiting Time:</b> 2:55<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289381" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_d08f58f7846274335d03346b939b86b1.setContent(html_fc56a501f813cbdecc96aafee03a13d3);
+            
+        
+
+        marker_9a682513a4286e0d7cdcc47d5cface83.bindPopup(popup_d08f58f7846274335d03346b939b86b1)
+        ;
+
+        
+    
+    
+            var marker_43dc72e9eddd7122af0bfbf0f8847b7c = L.marker(
+                [45.5883939, -73.5312813],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_bae7b0831d7b61c3c2f1f3532283a07e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_43dc72e9eddd7122af0bfbf0f8847b7c.setIcon(icon_bae7b0831d7b61c3c2f1f3532283a07e);
+        
+    
+        var popup_ebdb596779094bca6d6648f38d1eb490 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5f23d7217796fe96a248833dd8fed71f = $(`<div id="html_5f23d7217796fe96a248833dd8fed71f" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> Hôpital de soins psychiatriques de l'Est-de-Montréal<br>     <b>Address:</b> 7401 rue Hochelaga, Montréal, H1N 3M5 Montréal<br>     <b>Waiting Time:</b> currently not available<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=296" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_ebdb596779094bca6d6648f38d1eb490.setContent(html_5f23d7217796fe96a248833dd8fed71f);
+            
+        
+
+        marker_43dc72e9eddd7122af0bfbf0f8847b7c.bindPopup(popup_ebdb596779094bca6d6648f38d1eb490)
+        ;
+
+        
+    
+    
+            var marker_ce61d1af3787daa1963b6bc56cd9ce78 = L.marker(
+                [45.4723792, -73.6020273],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_d075dd0990885aa7c1c79757a6d85c9a = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_ce61d1af3787daa1963b6bc56cd9ce78.setIcon(icon_d075dd0990885aa7c1c79757a6d85c9a);
+        
+    
+        var popup_89ce0e4afad58d216b78e8089f3dc62a = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_7a962ef2fca084033d9f47fc1a2301d3 = $(`<div id="html_7a962ef2fca084033d9f47fc1a2301d3" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> L'Hôpital de Montréal pour enfants<br>     <b>Address:</b> 1001 boulevard Décarie, Montréal, H4A 3J1 Montréal<br>     <b>Waiting Time:</b> 4:28<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=831" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_89ce0e4afad58d216b78e8089f3dc62a.setContent(html_7a962ef2fca084033d9f47fc1a2301d3);
+            
+        
+
+        marker_ce61d1af3787daa1963b6bc56cd9ce78.bindPopup(popup_89ce0e4afad58d216b78e8089f3dc62a)
+        ;
+
+        
+    
+    
+            var marker_86b81a191de93fcbfcdb980811d4c6d4 = L.marker(
+                [46.8155002, -71.21083454],
+                {}
+            ).addTo(marker_cluster_9f85ca0a55417212329fd2ad96b18c69);
+        
+    
+            var icon_1eb0f92039d4057ef4f33b5d837ebed7 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_86b81a191de93fcbfcdb980811d4c6d4.setIcon(icon_1eb0f92039d4057ef4f33b5d837ebed7);
+        
+    
+        var popup_fb175238dc4463aee8d8b95928457eed = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_c56494c18ba8ce33eddbcc6f349dc2ff = $(`<div id="html_c56494c18ba8ce33eddbcc6f349dc2ff" style="width: 100.0%; height: 100.0%;">     <b>Hospital Name:</b> L'Hôtel-Dieu de Québec<br>     <b>Address:</b> 11 Côte du Palais, Québec, G1R 2J6 Capitale-Nationale<br>     <b>Waiting Time:</b> 3:25<br>     <b>Website:</b> <a href="https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=461" target="_blank">Visit Website</a>     </div>`)[0];
+                popup_fb175238dc4463aee8d8b95928457eed.setContent(html_c56494c18ba8ce33eddbcc6f349dc2ff);
+            
+        
+
+        marker_86b81a191de93fcbfcdb980811d4c6d4.bindPopup(popup_fb175238dc4463aee8d8b95928457eed)
+        ;
+
+        
+    
+    
+            marker_cluster_9f85ca0a55417212329fd2ad96b18c69.addTo(map_0da65aba0121c226c56a308db8f926e2);
+        
+</script>
+</html>
