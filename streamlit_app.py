@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import subprocess
+import sys
 
 # Get the current directory (where the script is located)
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,7 @@ map_html_path = os.path.join(current_dir, 'hospital_map_with_nearest_hospital_pa
 # Function to execute a script and handle errors
 def run_script(script_path):
     try:
-        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
         st.write(f"Running {script_path}...")
         st.write(result.stdout)  # Print the output of the script
         if result.stderr:
@@ -22,11 +23,32 @@ def run_script(script_path):
     except Exception as e:
         st.error(f"Failed to run {script_path}: {str(e)}")
 
+# Function to install a package if it's not already installed
+def install_package(package_name):
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", package_name], capture_output=True, text=True)
+        st.write(f"Installing {package_name}...")
+    except Exception as e:
+        st.error(f"Failed to install {package_name}: {str(e)}")
+
+# Check if 'selenium' and 'pandas' are installed, and install them if missing
+def check_and_install_dependencies():
+    try:
+        import selenium
+        import pandas
+    except ImportError:
+        st.write("Missing dependencies detected. Installing now...")
+        install_package('selenium')
+        install_package('pandas')
+
 # Streamlit app starts here
 st.title('Hospital Map Loader')
 
 # Button to trigger the process of loading the map
 if st.button('Load Map'):
+    # Step 0: Check and install necessary dependencies
+    check_and_install_dependencies()
+
     # Step 1: Run ER_QC_production.py
     run_script(er_qc_path)
 
