@@ -52,7 +52,7 @@ for index, row in data.iterrows():
     
     # Skip rows with NaN values for latitude or longitude
     if np.isnan(latitude) or np.isnan(longitude):
-        print(f"Skipping hospital {row['name']} due to missing location data.")
+        #print(f"Skipping hospital {row['name']} due to missing location data.")
         continue
     
     hospital_name = row['name']
