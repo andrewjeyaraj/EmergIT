@@ -45,9 +45,9 @@ if st.button('Load Map'):
         with open(map_html_path, 'r', encoding='utf-8') as file:
             map_html = file.read()
 
-        # Embed the HTML file content into the Streamlit app with custom width and height
+        # Embed the HTML file content into the Streamlit app with full width and larger height
         st.components.v1.html(f"""
-            <div style="width: 100%; height: 1200px;">
+            <div style="width: 100vw; height: 1200px;">
                 {map_html}
             </div>
             """, height=1200)
