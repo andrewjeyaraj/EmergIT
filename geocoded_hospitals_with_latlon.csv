@@ -1,231 +1,231 @@
-name,address,latitude,longitude,website,waiting_time,num_waiting,total_people,occupancy_rate,avg_wait_room,avg_stretcher_time
+name,address,latitude,longitude,website,waiting_tim,num_waiting,total_people,occupancy_rate,avg_wait_room,avg_stretcher_time
 Centre de santé et de services sociaux du Granit,"3569 rue Laval, Lac-Mégantic, G6B 1A5
-Estrie",45.58859395,-70.90560461,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=61,4:20,1,3,0%,5:01,10:39
+Estrie",45.58859395,-70.90560461,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=61,3:29,1,3,0%,5:01,10:39
 Centre hospitalier de l'Université de Montréal,"1000 rue Saint-Denis, Montréal, H2X 0A9
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1102474,11:32,28,118,116%,7:21,18:06
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1102474,11:31,28,118,116%,7:21,18:06
 Centre hospitalier de l'Université Laval,"2705 boulevard Laurier, Québec, G1V 4G2
-Capitale-Nationale",46.76843805,-71.28250969,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=462,7:16,31,83,105%,6:01,11:33
+Capitale-Nationale",46.76843805,-71.28250969,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=462,8:22,31,83,105%,6:01,11:33
 Centre hospitalier de St.Mary,"3830 avenue Lacombe, Montréal, H3T 1M5
-Montréal",45.4950203,-73.62383468,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289539,6:23,25,63,132%,5:46,17:51
+Montréal",45.4950203,-73.62383468,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289539,6:44,25,63,132%,5:46,17:51
 Centre hospitalier régional du Grand-Portage,"75 rue Saint-Henri, Rivière-du-Loup, G5R 2A4
-Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=515,4:30,15,25,100%,3:27,10:02
+Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=515,3:42,15,25,100%,3:27,10:02
 Centre multiservices de santé et de services sociaux Avellin-Dalcourt,"450 2e Rue, Louiseville, J5V 1V3
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=163521,5:30,10,21,50%,5:25,14:34
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=163521,6:02,10,21,50%,5:25,14:34
 Centre multiservices de santé et de services sociaux Chauveau,"11999 rue de l'Hôpital, Québec, G2A 2T7
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=918,3:52,16,24,20%,3:22,5:43
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=918,3:59,16,24,20%,3:22,5:43
 Centre multiservices de santé et de services sociaux Christ-Roi,"675 rue Saint-Jean-Baptiste, Nicolet, J3T 1S4
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=668,1:54,4,11,100%,4:23,9:16
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=668,4:16,4,11,100%,4:23,9:16
 Centre multiservices de santé et de services sociaux d'Argenteuil,"145 avenue de la Providence, Lachute, J8H 4C7
-Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145610,7:52,12,27,50%,4:06,22:19
+Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145610,6:51,12,27,50%,4:06,22:19
 Centre multiservices de santé et de services sociaux de Baie-Saint-Paul,"88 rue Racine, Baie-Saint-Paul, G3Z 0K3
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1190,4:12,5,10,13%,5:15,14:09
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1190,4:17,5,10,13%,5:15,14:09
 Centre multiservices de santé et de services sociaux de Fermont,"1 rue Aquilon, Fermont, G0G 1J0
-Côte-Nord",52.796743,-67.0902628,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=367,4:49,10,11,50%,3:16,5:50
+Côte-Nord",52.796743,-67.0902628,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=367,4:30,10,11,50%,3:16,5:50
 Centre multiservices de santé et de services sociaux de Forestville,"2 7e rue, Forestville, G0T 1E0
-Côte-Nord",48.7371185,-69.0753125,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=542,5:27,15,18,60%,2:20,10:52
+Côte-Nord",48.7371185,-69.0753125,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=542,4:36,15,18,60%,2:20,10:52
 Centre multiservices de santé et de services sociaux de Fortierville,"216 rue Principale, Fortierville, G0S 1J0
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=576,0:48,0,0,0%,3:07,4:24
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=576,0:53,0,0,0%,3:07,4:24
 Centre multiservices de santé et de services sociaux de Grande-Vallée,"71 rue Saint-François-Xavier Ouest, Grande-Vallée, G0E 1K0
-Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=712,1:27,3,6,50%,2:27,0:00
+Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=712,1:21,3,6,50%,2:27,0:00
 Centre multiservices de santé et de services sociaux de la Basse-Côte-Nord,"1070 boulevard Docteur-Camille-Marcoux, Blanc-Sablon, G0G 1W0
 Côte-Nord",51.4118896,-57.203258,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=351,1:06,2,3,50%,2:11,4:21
 Centre multiservices de santé et de services sociaux de la Minganie,"1035 promenade des Anciens, Havre-Saint-Pierre, G0G 1P0
-Côte-Nord",50.2377028,-63.6033943,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=566,2:29,3,7,100%,2:34,7:07
+Côte-Nord",50.2377028,-63.6033943,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=566,1:25,3,7,100%,2:34,7:07
 Centre multiservices de santé et de services sociaux de la MRC de Coaticook,"138 rue Jeanne-Mance, Coaticook, J1A 1W3
-Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=254873,2:41,16,20,33%,2:24,2:46
+Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=254873,1:07,16,20,33%,2:24,2:46
 Centre multiservices de santé et de services sociaux de La Sarre,"679 2e Rue Est, La Sarre, J9Z 2X7
-Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=699,6:31,20,25,40%,2:38,18:59
+Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=699,6:21,20,25,40%,2:38,18:59
 Centre multiservices de santé et de services sociaux de Mansfield-et-Pontefact,"160 Chemin de la Chute, Mansfield-et-Pontefract, J0X 1R0
-Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=536856,3:05,6,8,0%,3:01,7:44
+Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=536856,2:26,6,8,0%,3:01,7:44
 Centre multiservices de santé et de services sociaux de Memphrémagog,"50 rue Saint-Patrice Est, Magog, J1X 3X3
-Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=255131,7:54,25,37,136%,6:17,15:12
+Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=255131,7:42,25,37,136%,6:17,15:12
 Centre multiservices de santé et de services sociaux de Port-Cartier,"3 rue De Shelter Bay, Port-Cartier, G5B 2W9
-Côte-Nord",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=288592,4:10,9,13,20%,5:48,21:09
+Côte-Nord",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=288592,3:26,9,13,20%,5:48,21:09
 Centre multiservices de santé et de services sociaux de Rivière-Rouge,"1525 rue de L'Annonciation Nord, Rivière-Rouge, J0T 1T0
-Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=465,1:41,1,5,80%,3:34,12:31
+Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=465,3:17,1,5,80%,3:34,12:31
 Centre multiservices de santé et de services sociaux de Saint-Marc-des-Carrières,"1045 boulevard Bona-Dussault, Saint-Marc-des-Carrières, G0A 4B0
-Capitale-Nationale",46.6808892,-72.0492749,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=823,3:54,3,9,100%,2:08,8:00
+Capitale-Nationale",46.6808892,-72.0492749,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=823,3:26,3,9,100%,2:08,8:00
 Centre multiservices de santé et de services sociaux de Saint-Raymond,"700 rue Saint-Cyrille, Saint-Raymond, G3L 1W1
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=273998,4:23,9,19,100%,2:45,6:04
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=273998,3:17,9,19,100%,2:45,6:04
 Centre multiservices de santé et de services sociaux de Sainte-Agathe,"234 rue Saint-Vincent, Sainte-Agathe-des-Monts, J8C 2B8
-Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145939,9:54,25,63,172%,5:33,15:30
+Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145939,12:27,25,63,172%,5:33,15:30
 Centre multiservices de santé et de services sociaux de Sainte-Anne-de-Beaupré,"11000 rue des Montagnards, Beaupré, G0A 1E0
-Capitale-Nationale",47.0415461,-70.9004098,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=938,2:00,4,10,50%,4:34,13:34
+Capitale-Nationale",47.0415461,-70.9004098,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=938,3:16,4,10,50%,4:34,13:34
 Centre multiservices de santé et de services sociaux de Trois-Pistoles,"550 rue Notre-Dame Est, Trois-Pistoles, G0L 4K0
-Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=666,1:11,0,4,33%,2:52,6:42
+Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=666,1:05,0,4,33%,2:52,6:42
 Centre multiservices de santé et de services sociaux de Témiscaming-Kipawa,"180 rue Anvik, Témiscaming, J0Z 3R0
-Abitibi-Témiscamingue",46.72537315,-79.09439986,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=342,1:18,1,4,0%,3:40,0:00
+Abitibi-Témiscamingue",46.72537315,-79.09439986,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=342,0:46,1,4,0%,3:40,0:00
 Centre multiservices de santé et de services sociaux de Ville-Marie,"22 rue Notre-Dame Nord, Ville-Marie, J9V 1W8
-Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=551,6:45,11,16,40%,3:55,8:33
+Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=551,3:43,11,16,40%,3:55,8:33
 Centre multiservices de santé et de services sociaux des Escoumins,"4 rue de l'Hôpital, Les Escoumins, G0T 1K0
-Côte-Nord",48.3515871,-69.4070876,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=541,1:10,1,4,33%,2:04,0:00
+Côte-Nord",48.3515871,-69.4070876,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=541,1:07,1,4,33%,2:04,0:00
 Centre multiservices de santé et de services sociaux des Sources,"475 3e Avenue, Val-des-Sources, J1T 1X6
-Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=47557,7:03,20,23,43%,3:19,7:07
+Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=47557,7:09,20,23,43%,3:19,7:07
 Centre multiservices de santé et de services sociaux du Haut-Saint-Maurice,"885 boulevard Ducharme, La Tuque, G9X 3C1
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=616,1:20,5,7,0%,4:40,6:50
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=616,3:37,5,7,0%,4:40,6:50
 CHSLD et Hôpital Paul-Gilbert,"9330 boulevard du Centre-Hospitalier, Lévis, G6X 1L6
-Chaudière-Appalaches",46.72513675,-71.25915451,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=613,2:54,4,13,not applicable,0:00,0:00
+Chaudière-Appalaches",46.72513675,-71.25915451,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=613,2:58,4,13,not applicable,0:00,0:00
 CHU Sainte-Justine,"3175 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1C5
-Montréal",45.50344035,-73.62446772,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=801,3:11,9,69,163%,3:55,6:49
+Montréal",45.50344035,-73.62446772,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=801,5:00,9,69,163%,3:55,6:49
 CHUS - Hôpital Fleurimont,"3001 12e Avenue Nord, Sherbrooke, J1H 5N4
-Estrie",45.4473173,-71.8709085,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=424,10:42,33,74,121%,5:34,13:46
+Estrie",45.4473173,-71.8709085,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=424,10:02,33,74,121%,5:34,13:46
 CHUS - Hôtel-Dieu de Sherbrooke,"580 rue Bowen Sud, Sherbrooke, J1G 2E8
-Estrie",45.39944815,-71.8786916,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=425,11:34,29,87,141%,9:46,20:02
+Estrie",45.39944815,-71.8786916,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=425,11:55,29,87,141%,9:46,20:02
 CLSC de Pohénégamook,"1922 rue Saint-Vallier, Pohénégamook, G0L 1J0
-Bas-Saint-Laurent",47.48606243,-69.28288449,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=595,1:09,3,3,0%,1:13,9:52
+Bas-Saint-Laurent",47.48606243,-69.28288449,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=595,0:46,3,3,0%,1:13,9:52
 CLSC et centre d'hébergement de la Petite-Nation,"14 rue Saint-André, Saint-André-Avellin, J0V 1W0
 Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=31580,1:53,7,12,50%,4:09,4:54
 CLSC et centre de services ambulatoires de Murdochville,"600 avenue William-May, Murdochville, G0E 1W0
-Gaspésie-Îles-de-la-Madeleine",48.961394,-65.493858,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=713,1:10,2,7,50%,2:33,0:00
+Gaspésie-Îles-de-la-Madeleine",48.961394,-65.493858,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=713,1:09,2,7,50%,2:33,0:00
 CLSC et centre de services ambulatoires de Paspébiac,"273 boulevard Gérard-D.-Levesque, Paspébiac, G0C 2K0
-Gaspésie-Îles-de-la-Madeleine",48.02114187,-65.287599,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=358270,4:32,7,14,50%,3:09,10:02
+Gaspésie-Îles-de-la-Madeleine",48.02114187,-65.287599,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=358270,3:57,7,14,50%,3:09,10:02
 CLSC et hôpital Le Royer,"635 boulevard Jolliet, Baie-Comeau, G5C 1P1
-Côte-Nord",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1195,6:25,20,34,90%,5:21,13:30
+Côte-Nord",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1195,5:51,20,34,90%,5:21,13:30
 Hôpital Anna-Laberge,"200 boulevard Brisebois, Châteauguay, J6K 4W8
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1233,6:31,7,64,141%,9:26,22:14
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1233,6:10,7,64,141%,9:26,22:14
 Hôpital Barrie Memorial / Barrie Memorial Hospital,"28 rue Gale, Ormstown, J0S 1K0
-Montérégie",45.1256397,-74.0000538,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1124,7:34,20,25,160%,3:50,27:36:00
+Montérégie",45.1256397,-74.0000538,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1124,6:34,20,25,160%,3:50,27:36:00
 Hôpital Brome-Missisquoi-Perkins,"950 rue Principale, Cowansville, J2K 1K3
-Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1236,10:20,25,54,150%,8:31,18:07
+Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1236,13:26,25,54,150%,8:31,18:07
 Hôpital Charles-Le Moyne,"3120 boulevard Taschereau, Longueuil, J4V 2H1
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=217,17:06,65,131,128%,7:54,21:22
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=217,13:15,65,131,128%,7:54,21:22
 Hôpital d'Alma,"300 boulevard Champlain Sud, Alma, G8B 5W3
-Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=594,6:01,10,22,41%,3:45,9:09
+Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=594,5:54,10,22,41%,3:45,9:09
 Hôpital d'Amos,"622 4e Rue Ouest, Amos, J9T 2S2
-Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1208,4:52,16,23,57%,3:06,9:09
+Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1208,4:55,16,23,57%,3:06,9:09
 Hôpital d'Amqui,"135 avenue Gaëtan-Archambault, Amqui, G5J 2K5
-Bas-Saint-Laurent",48.46856425,-67.41924531,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1035,4:30,8,12,33%,2:01,3:58
+Bas-Saint-Laurent",48.46856425,-67.41924531,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1035,2:32,8,12,33%,2:01,3:58
 Hôpital de Chandler,"451 rue Monseigneur-Ross Est, Chandler, G0C 1K0
-Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1102,5:13,14,20,13%,3:54,7:45
+Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1102,3:19,14,20,13%,3:54,7:45
 Hôpital de Chicoutimi,"305 rue Saint-Vallier, Saguenay, G7H 5H6
-Saguenay-Lac-Saint-Jean",48.4267813,-71.04827831,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=518,4:37,19,76,71%,4:55,13:49
+Saguenay-Lac-Saint-Jean",48.4267813,-71.04827831,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=518,8:12,19,76,71%,4:55,13:49
 Hôpital de Dolbeau-Mistassini,"2000 boulevard Sacré-Coeur, Dolbeau-Mistassini, G8L 2R5
-Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=592,3:49,12,30,40%,2:42,8:07
+Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=592,2:12,12,30,40%,2:42,8:07
 Hôpital de Gaspé,"215 boulevard de York Ouest, Gaspé, G4X 2W2
-Gaspésie-Îles-de-la-Madeleine",48.8128456,-64.49666755,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=98610,4:35,9,15,67%,3:43,18:58
+Gaspésie-Îles-de-la-Madeleine",48.8128456,-64.49666755,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=98610,2:33,9,15,67%,3:43,18:58
 Hôpital de Gatineau,"909 boulevard La Vérendrye Ouest, Gatineau, J8P 7H2
-Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=736,14:23,19,64,132%,10:39,21:37
+Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=736,11:55,19,64,132%,10:39,21:37
 Hôpital de Granby,"205 boulevard Leclerc Ouest, Granby, J2G 1T7
-Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1135,16:54,35,75,150%,12:33,20:49
+Estrie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1135,12:04,35,75,150%,12:33,20:49
 Hôpital de Hull,"116 boulevard Lionel-Émond, Gatineau, J8Y 1W7
-Outaouais",45.4458496,-75.7460147,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=737,13:58,24,68,124%,7:01,19:21
+Outaouais",45.4458496,-75.7460147,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=737,12:09,24,68,124%,7:01,19:21
 Hôpital de l'Archipel,"430 chemin Principal, Les Îles-de-la-Madeleine, G4T 1R9
-Gaspésie-Îles-de-la-Madeleine",47.3758802,-61.8677393,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1103,0:54,1,13,133%,3:34,7:29
+Gaspésie-Îles-de-la-Madeleine",47.3758802,-61.8677393,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1103,0:36,1,13,133%,3:34,7:29
 Hôpital de l'Enfant-Jésus,"1401 18e Rue, Québec, G1J 1Z4
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=216,5:28,41,110,123%,5:39,16:56
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=216,7:22,41,110,123%,5:39,16:56
 Hôpital de La Baie,"1000 rue du Docteur-Desgagné, Saguenay, G7B 2Y6
-Saguenay-Lac-Saint-Jean",48.34374875,-70.88319507,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=714,4:11,5,20,43%,4:42,7:43
+Saguenay-Lac-Saint-Jean",48.34374875,-70.88319507,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=714,3:49,5,20,43%,4:42,7:43
 Hôpital de la Cité-de-la-Santé,"1755 boulevard René-Laennec, Laval, H7M 3L9
-Laval",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1194,13:03,52,157,161%,7:55,22:53
+Laval",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1194,11:29,52,157,161%,7:55,22:53
 Hôpital de Lachine,"650 16e Avenue, Montréal, H8S 3N5
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1154,6:59,10,35,143%,5:08,46:58:00
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1154,5:51,10,35,143%,5:08,46:58:00
 Hôpital de Lanaudière et Centre d'hébergement Parphilia-Ferland,"1000 boulevard Sainte-Anne, Saint-Charles-Borromée, J6E 6J2
-Lanaudière",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1203,8:56,currently not available,currently not available,not applicable,currently not available,currently not available
+Lanaudière",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1203,7:50,currently not available,currently not available,not applicable,currently not available,currently not available
 Hôpital de LaSalle,"8585 terrasse Champlain, Montréal, H8P 1C1
-Montréal",45.42072445,-73.62329656,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=898,8:40,21,44,147%,6:55,19:37
+Montréal",45.42072445,-73.62329656,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=898,10:55,21,44,147%,6:55,19:37
 Hôpital de Maniwaki,"309 boulevard Desjardins, Maniwaki, J9E 2E7
-Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=56388,3:36,2,11,150%,3:06,34:41:00
+Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=56388,1:38,2,11,150%,3:06,34:41:00
 Hôpital de Matane,"333 rue Thibault, Matane, G4W 2W5
-Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=65372,2:39,5,16,100%,4:29,11:24
+Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=65372,2:00,5,16,100%,4:29,11:24
 Hôpital de Mont-Laurier,"2561 chemin de la Lièvre Sud, Mont-Laurier, J9L 3G3
-Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145476,7:46,9,33,160%,5:03,11:53
+Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=145476,8:19,9,33,160%,5:03,11:53
 Hôpital de Montmagny,"350 boulevard Taché Ouest, Montmagny, G5V 3R8
-Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1214,3:36,15,34,70%,1:41,10:59
+Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1214,3:39,15,34,70%,1:41,10:59
 Hôpital Notre-Dame-du-Lac,"58 rue de l'Église, Témiscouata-sur-le-Lac, G0L 1X0
-Bas-Saint-Laurent",47.611888,-68.798841,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=751,2:07,3,10,100%,2:39,4:45
+Bas-Saint-Laurent",47.611888,-68.798841,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=751,0:55,3,10,100%,2:39,4:45
 Hôpital de Rouyn-Noranda,"4 9e Rue, Rouyn-Noranda, J9X 2B2
-Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1210,10:11,28,34,75%,4:14,12:47
+Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1210,9:17,28,34,75%,4:14,12:47
 Hôpital de Saint-Eustache,"520 boulevard Arthur-Sauvé, Saint-Eustache, J7R 5B1
-Laurentides",45.5707884,-73.911428,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1204,14:37,25,92,166%,8:22,26:43:00
+Laurentides",45.5707884,-73.911428,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1204,13:04,25,92,166%,8:22,26:43:00
 Hôpital de Saint-Georges,"1515 17e rue, Saint-Georges, G5Y 4T8
-Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1215,5:30,21,51,119%,5:12,15:14
+Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1215,6:29,21,51,119%,5:12,15:14
 Hôpital de Saint-Jérôme,"290 rue Montigny, Saint-Jérôme, J7Z 5T3
-Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1206,11:30,25,102,143%,5:02,26:52:00
+Laurentides",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1206,11:35,25,102,143%,5:02,26:52:00
 Hôpital de Thetford,"1717 rue Notre-Dame Est, Thetford Mines, G6G 2V4
-Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=29044,4:47,14,41,160%,3:22,21:56
+Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=29044,2:19,14,41,160%,3:22,21:56
 Hôpital et centre de réadaptation en dépendance de Val-d'Or,"725 6e Rue, Val-d'Or, J9P 3Y1
-Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=181900,9:19,27,41,91%,3:42,11:02
+Abitibi-Témiscamingue",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=181900,8:20,27,41,91%,3:42,11:02
 Hôpital de Verdun,"4000 boulevard LaSalle, Montréal, H4G 2A3
-Montréal",45.4639933,-73.563513,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=502,2:30,10,79,215%,4:37,28:16:00
+Montréal",45.4639933,-73.563513,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=502,1:35,10,79,215%,4:37,28:16:00
 Hôpital Douglas,"6875 boulevard Lasalle, Montréal, H4H 1R3
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=288692,3:58,3,13,138%,4:09,18:05
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=288692,1:43,3,13,138%,4:09,18:05
 Hôpital du Centre-de-la-Mauricie,"50 119e Rue, Shawinigan, G9P 5K1
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=638,11:37,10,48,142%,4:16,15:40
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=638,7:58,10,48,142%,4:16,15:40
 Hôpital du Haut-Richelieu,"920 boulevard du Séminaire Nord, Saint-Jean-sur-Richelieu, J3A 1B7
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1222,9:07,35,115,159%,8:15,29:07:00
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1222,10:51,35,115,159%,8:15,29:07:00
 Hôpital du Sacré-Cœur de Montréal,"5400 boulevard Gouin Ouest, Montréal, H4J 1C5
-Montréal",45.5324388,-73.7136577,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=174,9:01,31,105,133%,6:30,25:45:00
+Montréal",45.5324388,-73.7136577,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=174,9:34,31,105,133%,6:30,25:45:00
 Hôpital du Saint-Sacrement,"1050 chemin Sainte-Foy, Québec, G1S 4L8
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=457,4:40,8,38,118%,4:10,15:27
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=457,7:23,8,38,118%,4:10,15:27
 Hôpital du Suroît,"150 rue Saint-Thomas, Salaberry-de-Valleyfield, J6T 6C1
 Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1231,4:44,7,56,125%,6:54,31:52:00
 Hôpital en santé mentale Albert-Prévost,"6555 boulevard Gouin Ouest, Montréal, H4K 1B3
 Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1582,0:56,1,17,133%,6:50,51:30:00
 Hôpital et centre d'hébergement de Roberval,"450 rue Brassard, Roberval, G8H 1B9
-Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1143,5:15,12,29,85%,4:21,7:35
+Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1143,6:11,12,29,85%,4:21,7:35
 Hôpital et centre de réadaptation de Jonquière,"2230 rue de l'Hôpital, Saguenay, G7X 7X2
-Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=906,3:43,12,32,113%,4:36,17:13
+Saguenay-Lac-Saint-Jean",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=906,5:34,12,32,113%,4:36,17:13
 Hôpital et CHSLD de Papineau,"155 rue Maclaren Est, Gatineau, J8L 0C2
-Outaouais",45.5882483,-75.4127149,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1201,8:05,14,30,92%,4:25,25:28:00
+Outaouais",45.5882483,-75.4127149,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1201,8:21,14,30,92%,4:25,25:28:00
 Hôpital et CHSLD du Pontiac,"200 rue Argue, Shawville, J0X 2Y0
-Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=598,1:27,8,15,75%,6:29,18:55
+Outaouais",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=598,2:30,8,15,75%,6:29,18:55
 Hôpital et CHSLD Mémorial de Wakefield / Wakefield Memorial Hospital,"101 chemin Burnside, La Pêche, J0X 3G0
-Outaouais",45.64902085,-75.93248465,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1198,1:23,2,9,75%,3:56,14:04
+Outaouais",45.64902085,-75.93248465,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1198,1:41,2,9,75%,3:56,14:04
 Hôpital et CLSC de la Malbaie,"303 rue Saint-Étienne, La Malbaie, G5A 1T1
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1188,2:49,6,11,33%,2:08,11:10
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1188,1:18,6,11,33%,2:08,11:10
 Hôpital et CLSC de Sainte-Anne-des-Monts,"50 rue du Belvédère, Sainte-Anne-des-Monts, G4V 1X4
-Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=157718,4:15,11,19,150%,1:48,9:52
+Gaspésie-Îles-de-la-Madeleine",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=157718,3:00,11,19,150%,1:48,9:52
 Hôpital et CLSC de Sept-Îles,"45 rue du Père-Divet, Sept-Îles, G4R 3N7
-Côte-Nord",50.209753,-66.3826559,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=297169,3:03,5,15,90%,7:40,16:55
+Côte-Nord",50.209753,-66.3826559,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=297169,2:58,5,15,90%,7:40,16:55
 Hôpital et groupe de médecine de famille universitaire de Maria,"419 boulevard Perron, Maria, G0C 1Y0
-Gaspésie-Îles-de-la-Madeleine",48.1681255,-65.99195425,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1115,4:35,12,31,150%,4:59,12:53
+Gaspésie-Îles-de-la-Madeleine",48.1681255,-65.99195425,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1115,3:34,12,31,150%,4:59,12:53
 Hôpital Fleury,"2180 rue Fleury Est, Montréal, H2B 1K3
-Montréal",45.57187145,-73.65000571,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1171,8:53,15,51,122%,5:04,22:08
+Montréal",45.57187145,-73.65000571,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1171,6:14,15,51,122%,5:04,22:08
 Hôpital général de Montréal,"1650 avenue Cedar, Montréal, H3G 1A4
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=326,6:36,19,93,171%,5:46,27:46:00
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=326,6:05,19,93,171%,5:46,27:46:00
 Hôpital général du Lakeshore,"160 avenue Stillview, Pointe-Claire, H9R 2Y2
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1150,9:20,currently not available,currently not available,not applicable,currently not available,currently not available
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1150,9:23,currently not available,currently not available,not applicable,currently not available,currently not available
 Hôpital général juif,"3755 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1E2
-Montréal",45.49684885,-73.6304158,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=192,7:52,67,191,258%,3:24,18:23
+Montréal",45.49684885,-73.6304158,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=192,6:55,67,191,258%,3:24,18:23
 Hôpital Honoré-Mercier,"2750 boulevard Laframboise, Saint-Hyacinthe, J2S 4Y8
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1237,13:30,40,73,127%,5:16,13:50
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1237,11:14,40,73,127%,5:16,13:50
 Hôpital Jean-Talon,"1385 rue Jean-Talon Est, Montréal, H2E 1S6
-Montréal",45.545663,-73.6094317,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1172,8:53,24,63,114%,5:25,19:21
+Montréal",45.545663,-73.6094317,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1172,9:49,24,63,114%,5:25,19:21
 Hôpital Maisonneuve-Rosemont,"5415 boulevard de l'Assomption, Montréal, H1T 2M4
-Montréal",45.5752376,-73.5603456,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=341,8:55,33,118,137%,4:03,26:18:00
+Montréal",45.5752376,-73.5603456,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=341,8:52,33,118,137%,4:03,26:18:00
 Hôpital Notre-Dame,"1560 rue Sherbrooke Est, Montréal, H2L 4M1
-Montréal",45.52614335,-73.56342922,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=869391,4:44,10,57,100%,7:32,22:58
+Montréal",45.52614335,-73.56342922,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=869391,7:52,10,57,100%,7:32,22:58
 Hôpital Notre-Dame-de-Fatima,"1201 6e Avenue Pilote, La Pocatière, G0R 1Z0
-Bas-Saint-Laurent",47.3719409,-70.028115,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=704,5:30,3,10,86%,2:06,8:13
+Bas-Saint-Laurent",47.3719409,-70.028115,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=704,3:36,3,10,86%,2:06,8:13
 Hôpital Pierre-Boucher,"1333 boulevard Jacques-Cartier Est, Longueuil, J4M 2A5
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=754149,10:54,30,100,143%,5:30,28:48:00
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=754149,10:49,30,100,143%,5:30,28:48:00
 Hôpital Pierre-Le Gardeur,"911 montée des Pionniers, Terrebonne, J6V 2H2
-Lanaudière",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1130,9:00,39,108,113%,5:03,21:36
+Lanaudière",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1130,7:45,39,108,113%,5:03,21:36
 Hôpital Royal Victoria,"1001 boulevard Décarie, Montréal, H4A 3J1
-Montréal",45.4723792,-73.6020273,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=833,15:36,34,124,194%,11:40,26:25:00
+Montréal",45.4723792,-73.6020273,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=833,15:09,34,124,194%,11:40,26:25:00
 Hôpital régional de Rimouski,"150 avenue Rouleau, Rimouski, G5L 5T1
-Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1113,4:04,13,33,83%,4:01,15:06
+Bas-Saint-Laurent",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1113,7:25,13,33,83%,4:01,15:06
 Hôpital Saint-François D'Assise,"10 rue de l'Espinay, Québec, G1L 3L5
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=463,8:45,24,62,97%,5:30,18:49
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=463,8:23,24,62,97%,5:30,18:49
 Hôpital Sainte-Croix,"570 rue Heriot, Drummondville, J2B 1C1
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1197,10:58,25,53,147%,6:22,11:37
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1197,11:04,25,53,147%,6:22,11:37
 Hôpital Santa Cabrini,"5655 rue Saint-Zotique Est, Montréal, H1T 1P7
-Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=313,8:02,16,79,158%,5:04,25:40:00
+Montréal",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=313,6:41,16,79,158%,5:04,25:40:00
 Hôtel-Dieu d'Arthabaska,"5 rue des Hospitalières, Victoriaville, G6P 6N2
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1127,9:25,14,35,125%,4:03,7:46
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1127,7:13,14,35,125%,4:03,7:46
 Hôtel-Dieu de Lévis,"143 rue Wolfe, Lévis, G6V 3Z1
-Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=364992,3:44,29,102,140%,2:36,24:00:00
+Chaudière-Appalaches",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=364992,7:14,29,102,140%,2:36,24:00:00
 Hôtel-Dieu de Sorel,"400 avenue de l'Hôtel-Dieu, Sorel-Tracy, J3P 1N5
-Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1228,5:01,7,41,106%,5:22,14:33
+Montérégie",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=1228,5:38,7,41,106%,5:22,14:33
 Institut de cardiologie de Montréal,"5000 rue Bélanger, Montréal, H1T 1C8
-Montréal",45.5738644,-73.57811978,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289381,1:25,7,30,73%,2:53,15:40
+Montréal",45.5738644,-73.57811978,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=289381,1:38,7,30,73%,2:53,15:40
 Institut universitaire de cardiologie et de pneumologie de Québec,"2725 chemin Sainte-Foy, Québec, G1V 4G5
-Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=167928,4:27,7,35,130%,4:15,13:31
+Capitale-Nationale",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=167928,4:50,7,35,130%,4:15,13:31
 Hôpital de soins psychiatriques de l'Est-de-Montréal,"7401 rue Hochelaga, Montréal, H1N 3M5
-Montréal",45.5883939,-73.5312813,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=296,2:04,3,15,58%,0:00,0:00
+Montréal",45.5883939,-73.5312813,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=296,1:02,3,15,58%,0:00,0:00
 L'Hôpital de Montréal pour enfants,"1001 boulevard Décarie, Montréal, H4A 3J1
-Montréal",45.4723792,-73.6020273,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=831,3:06,22,74,192%,3:48,7:37
+Montréal",45.4723792,-73.6020273,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=831,6:31,22,74,192%,3:48,7:37
 L'Hôtel-Dieu de Québec,"11 Côte du Palais, Québec, G1R 2J6
-Capitale-Nationale",46.8155002,-71.21083454,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=461,5:00,4,28,113%,2:52,14:31
+Capitale-Nationale",46.8155002,-71.21083454,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=461,2:59,4,28,113%,2:52,14:31
 Pavillon Sainte-Marie,"1991 boulevard du Carmel, Trois-Rivières, G8Z 3R9
-Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=648,10:52,27,98,142%,5:43,18:22
+Mauricie et Centre-du-Québec",,,https://sante.gouv.qc.ca/en/repertoire-ressources/ressource/?nofiche=648,7:34,27,98,142%,5:43,18:22

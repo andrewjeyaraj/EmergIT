@@ -159,7 +159,7 @@ panel = """
 
     <button onclick="findNearestHospital()">Find lowest wait time</button>
 
-    <div id="output" style="margin-top: 10px;">
+    <div id="output" style="margin-top: 10px;z-index:9999;">
         <!-- Output will be displayed here -->
     </div>
 </div>
